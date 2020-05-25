@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(function () {
       // If test is an empty array (or null?)
       // test = array w/ one element
       let parsed = JSON.parse(existing);
-      if (existing === null || parsed.columnOder.length == 0) {
+      if (existing === null || parsed.columnOrder.length == 0) {
         localStorage.setItem(
           "board",
           JSON.stringify({
@@ -30,6 +30,41 @@ chrome.runtime.onInstalled.addListener(function () {
         );
       } else {
         // find next available #
+        let taskId;
+        let i = 1;
+        while (true) {
+          taskId = "task-" + i;
+          if (!parsed.tasks[taskId]) {
+            break;
+          }
+          i++;
+        }
+
+        // update tasks obj
+        let newTask = {
+          id: taskId,
+          content: url,
+        };
+
+        let newTasks = {
+          [taskId]: newTask,
+          ...parsed.tasks,
+        };
+        console.log(newTasks);
+
+        let firstColId = parsed.columns[Object.keys(parsed.columns)[0]].id;
+
+        // update columns
+        parsed.columns[firstColId].taskIds.unshift(taskId);
+
+        // set state
+        let newState = {
+          tasks: newTasks,
+          columns: parsed.columns,
+          columnOrder: parsed.columnOrder,
+        };
+        console.log(newState);
+        localStorage.setItem("board", JSON.stringify(newState));
       }
 
       // Generating a popup that confirms save
