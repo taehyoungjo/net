@@ -1,37 +1,12 @@
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import Header from "./components/Header";
-// import Example from "./components/example";
-// import { DndProvider } from "react-dnd";
-// import Backend from "react-dnd-html5-backend";
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <DndProvider backend={Backend}>
-//         <Header />
-//         <Example />
-//       </DndProvider>
-//     </div>
-//   );
-// }
-
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<App />, rootElement);
-
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import App from "./components2/App";
-// ReactDOM.render(<App />, document.getElementById("app"));
-
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import "@atlaskit/css-reset";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import initialData from "./initial-data";
-import Column from "./column";
-import Header from "./components/Header";
+import Column from "./components/column";
+import Header from "./components/header";
+import AddListWrapper from "./components/molecules/add-list-wrapper";
 
 const Container = styled.div`
   display: flex;
@@ -40,9 +15,25 @@ const Container = styled.div`
 
 class InnerList extends React.PureComponent {
   render() {
-    const { column, taskMap, index } = this.props;
+    const {
+      column,
+      taskMap,
+      index,
+      onRemoveList,
+      onUpdateListTitle,
+      onClipboard,
+    } = this.props;
     const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-    return <Column column={column} tasks={tasks} index={index} />;
+    return (
+      <Column
+        column={column}
+        tasks={tasks}
+        index={index}
+        onRemoveList={onRemoveList}
+        onUpdateListTitle={onUpdateListTitle}
+        onClipboard={onClipboard}
+      />
+    );
   }
 }
 
@@ -151,6 +142,85 @@ class App extends React.Component {
     this.setState(newState);
   };
 
+  onCreateList = (title) => {
+    let newColId;
+    let i = 1;
+    while (true) {
+      newColId = "column-" + i;
+      if (!this.state.columns[newColId]) {
+        break;
+      }
+      i++;
+    }
+    const newColumn = {
+      id: newColId,
+      title: title,
+      taskIds: [],
+    };
+    const newState = {
+      ...this.state,
+      columns: {
+        ...this.state.columns,
+        [newColumn.id]: newColumn,
+      },
+      columnOrder: [newColId, ...this.state.columnOrder],
+    };
+    console.log(newState);
+    this.setState(newState);
+  };
+
+  onRemoveList = (listId) => () => {
+    const newColumns = this.state.columns;
+    const deletedColsTasks = newColumns[listId].taskIds;
+    // Remove tasks of list
+    var newtasks = this.state.tasks;
+    var taskId;
+    for (var i = 0; i < deletedColsTasks.length; i++) {
+      taskId = deletedColsTasks[i];
+      delete newtasks[taskId];
+    }
+
+    delete newColumns[listId];
+    const newState = {
+      tasks: newtasks,
+      columns: newColumns,
+      columnOrder: this.state.columnOrder.filter((e) => e != listId),
+    };
+    console.log(newState);
+    this.setState(newState);
+  };
+
+  onUpdateList = (list) => (title) => {
+    const newColumn = {
+      ...list,
+      title: title,
+    };
+
+    const columnsWo = this.state.columns;
+    delete columnsWo[list.id];
+
+    const newState = {
+      ...this.state,
+      columns: {
+        ...columnsWo,
+        [newColumn.id]: newColumn,
+      },
+    };
+    console.log(newState);
+    this.setState(newState);
+  };
+
+  onClipboard = (column) => () => {
+    var out = "";
+    out += column.title;
+    for (var i = 0; i < column.taskIds.length; i++) {
+      out += "\n";
+      out += this.state.tasks[column.taskIds[i]].content;
+    }
+    console.log(out);
+    navigator.clipboard.writeText(out);
+  };
+
   render() {
     return (
       <div>
@@ -167,6 +237,7 @@ class App extends React.Component {
           >
             {(provided) => (
               <Container {...provided.droppableProps} ref={provided.innerRef}>
+                <AddListWrapper onCreate={this.onCreateList} />
                 {this.state.columnOrder.map((columnId, index) => {
                   const column = this.state.columns[columnId];
                   // const tasks = column.taskIds.map(
@@ -187,6 +258,9 @@ class App extends React.Component {
                       column={column}
                       taskMap={this.state.tasks}
                       index={index}
+                      onRemoveList={this.onRemoveList(column.id)}
+                      onUpdateListTitle={this.onUpdateList(column)}
+                      onClipboard={this.onClipboard}
                     />
                   );
                 })}

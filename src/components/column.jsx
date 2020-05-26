@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Task from "./task";
+import ListHeader from "./molecules/list-header";
 
 const Container = styled.div`
   margin: 8px;
@@ -13,9 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Title = styled.h3`
-  padding: 8px;
-`;
+
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
@@ -46,9 +45,16 @@ export default class Column extends React.Component {
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
         {(provided) => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
-            <Title {...provided.dragHandleProps}>
+            {/* <Title {...provided.dragHandleProps}>
               {this.props.column.title}
-            </Title>
+            </Title> */}
+            <ListHeader
+              title={this.props.column.title}
+              onUpdateTitle={this.props.onUpdateListTitle}
+              onRemove={this.props.onRemoveList}
+              dragHandleProps={provided.dragHandleProps}
+              onClipboard={this.props.onClipboard(this.props.column)}
+            />
             <Droppable droppableId={this.props.column.id} type="task">
               {(provided, snapshot) => (
                 <TaskList

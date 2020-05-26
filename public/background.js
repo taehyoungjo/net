@@ -68,7 +68,11 @@ chrome.runtime.onInstalled.addListener(function () {
       }
 
       // Generating a popup that confirms save
-      // Or changing the icon
+      chrome.tabs.executeScript({
+        file: "saveConfirmation.js",
+      });
+
+      // Changing the icon
     });
   });
 });
