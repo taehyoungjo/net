@@ -156,8 +156,8 @@ class ListHeader extends React.PureComponent {
           onBlur={this.onBlur}
           onKeyDown={this.handleKeydown}
         />
-        <ButtonClip onClick={onClipboard} />
-        <ButtonRemove onClick={onRemove} />
+        <ButtonClip type="button" onClick={onClipboard} />
+        <ButtonRemove type="button" onClick={onRemove} />
       </Container>
     );
   }

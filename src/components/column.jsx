@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { string, func, bool, array } from "prop-types";
+
 import Task from "./task";
 import ListHeader from "./molecules/list-header";
+import ListFooter from "./molecules/list-footer";
+import FormAddCard from "./molecules/form-add-card";
 
 const Container = styled.div`
   margin: 8px;
@@ -13,6 +17,10 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
 `;
 
 const TaskList = styled.div`
@@ -21,8 +29,15 @@ const TaskList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? "lightgrey" : "white"};
   flex-grow: 1;
-  min-height: 100px;
+  min-height: 26px;
   width: 218px;
+`;
+
+const ScrollView = styled.div`
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 100%;
+  flex: 1;
 `;
 
 class InnerList extends React.Component {
@@ -34,12 +49,69 @@ class InnerList extends React.Component {
   }
   render() {
     return this.props.tasks.map((task, index) => (
-      <Task key={task.id} task={task} index={index} />
+      <Task
+        key={task.id}
+        onRemoveCard={this.props.onRemoveCard}
+        task={task}
+        index={index}
+      />
     ));
   }
 }
 
 export default class Column extends React.Component {
+  static propTypes = {
+    listId: string,
+    listType: string,
+    onAddCard: func,
+    onCloseForm: func,
+    isFormShow: bool,
+    getFormRef: func,
+    cards: array,
+  };
+
+  state = {
+    open: false,
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
+  }
+
+  setFormState = (open) => () => {
+    this.setState({ open }, () => {
+      if (open) {
+        document.addEventListener("click", this.handleClickOutside);
+      } else {
+        document.removeEventListener("click", this.handleClickOutside);
+      }
+    });
+  };
+
+  handleClickOutside = (event) => {
+    if (!this.state.open) {
+      return;
+    }
+    if (this.form.contains(event.target)) {
+      return;
+    }
+    this.setFormState(false)();
+  };
+
+  onAddCard = (title) => {
+    const { onCreateCard } = this.props;
+    onCreateCard(title);
+  };
+
+  onRemoveCard = (cardId) => {
+    const { onRemoveCard } = this.props;
+    onRemoveCard(cardId);
+  };
+
+  getFormRef = (node) => {
+    this.form = node;
+  };
+
   render() {
     return (
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
@@ -48,29 +120,45 @@ export default class Column extends React.Component {
             {/* <Title {...provided.dragHandleProps}>
               {this.props.column.title}
             </Title> */}
-            <ListHeader
-              title={this.props.column.title}
-              onUpdateTitle={this.props.onUpdateListTitle}
-              onRemove={this.props.onRemoveList}
-              dragHandleProps={provided.dragHandleProps}
-              onClipboard={this.props.onClipboard(this.props.column)}
-            />
-            <Droppable droppableId={this.props.column.id} type="task">
-              {(provided, snapshot) => (
-                <TaskList
-                  //   innerRef={provided.innerRef}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver}
-                >
-                  {/* {this.props.tasks.map((task, index) => (
+            <ScrollView>
+              <ListHeader
+                title={this.props.column.title}
+                onUpdateTitle={this.props.onUpdateListTitle}
+                onRemove={this.props.onRemoveList}
+                dragHandleProps={provided.dragHandleProps}
+                onClipboard={this.props.onClipboard(this.props.column)}
+              />
+              <Droppable droppableId={this.props.column.id} type="task">
+                {(provided, snapshot) => (
+                  <TaskList
+                    //   innerRef={provided.innerRef}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    isDraggingOver={snapshot.isDraggingOver}
+                  >
+                    {/* {this.props.tasks.map((task, index) => (
                     <Task key={task.id} task={task} index={index} />
-                  ))} */}{" "}
-                  <InnerList tasks={this.props.tasks} />
-                  {provided.placeholder}
-                </TaskList>
-              )}
-            </Droppable>
+                  ))} */}
+                    <InnerList
+                      tasks={this.props.tasks}
+                      onRemoveCard={this.onRemoveCard}
+                    />
+                    {provided.placeholder}
+                    {this.state.open && (
+                      <FormAddCard
+                        innerRef={this.getFormRef}
+                        onClose={this.setFormState(false)}
+                        onSubmit={this.onAddCard}
+                      />
+                    )}
+                  </TaskList>
+                )}
+              </Droppable>
+            </ScrollView>
+
+            {!this.state.open && (
+              <ListFooter onClick={this.setFormState(true)} />
+            )}
           </Container>
         )}
       </Draggable>

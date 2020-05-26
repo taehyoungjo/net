@@ -22,6 +22,10 @@ export default class Task extends React.Component {
             isDragging={snapshot.isDragging}
           >
             {this.props.task.content}
+            <button
+              type="button"
+              onClick={() => this.props.onRemoveCard(this.props.task.id)}
+            ></button>
           </Container>
         )}
       </Draggable>

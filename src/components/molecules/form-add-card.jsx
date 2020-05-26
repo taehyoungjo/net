@@ -1,10 +1,10 @@
 import React from "react";
 import { func } from "prop-types";
 import styled from "styled-components";
-import debounce from "lodash.debounce";
+// import debounce from "lodash.debounce";
 
-import getPaletteColor from "../../../services/getPaletteColor";
-import { Button, Paper, Textarea } from "../atoms";
+//import getPaletteColor from "../../../services/getPaletteColor";
+// import { Button, Paper, Textarea } from "../atoms";
 
 const Form = styled.form`
   display: flex;
@@ -23,17 +23,43 @@ const Action = styled.div`
   align-items: center;
 `;
 
+const Button = styled.button``;
+
 const ButtonClose = styled(Button)`
-  color: ${getPaletteColor("shades", 400)};
   background: transparent;
 `;
 
-const PaperInput = Paper.extend`
+const Paper = styled.div`
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
+  padding: 8px;
+  overflow: hidden;
+  position: relative;
+`;
+
+const PaperInput = styled(Paper)`
   margin-bottom: 4px;
   height: auto;
 `;
 
-const TitleInput = Textarea.extend`
+const Textarea = styled.textarea`
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  padding: 6px 8px;
+  display: block;
+  border-radius: 3px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+  }
+`;
+
+const TitleInput = styled(Textarea)`
   border: none;
   background: transparent;
   box-shadow: none;
@@ -61,25 +87,23 @@ class FormAddCard extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.setState(
-      { title: window.sessionStorage.getItem("title") || "" },
-      () => {}
-    );
+    this.setState({ title: "" }, () => {});
     this.input.focus();
   }
 
   onChange = (event) => {
     const title = event.target.value;
-    this.setState(
-      { title },
-      debounce(
-        () => {
-          window.sessionStorage.setItem("title", title);
-        },
-        50,
-        { leading: false, trailing: true }
-      )
-    );
+    // this.setState(
+    //   { title },
+    //   debounce(
+    //     () => {
+    //       window.sessionStorage.setItem("title", title);
+    //     },
+    //     50,
+    //     { leading: false, trailing: true }
+    //   )
+    // );
+    this.setState({ title });
     this.resizeInput();
   };
 
@@ -114,7 +138,6 @@ class FormAddCard extends React.PureComponent {
   };
 
   clearValue = () => {
-    window.sessionStorage.removeItem("title");
     this.setState({ title: "" }, () => {
       this.input.scrollIntoView();
     });
@@ -133,12 +156,11 @@ class FormAddCard extends React.PureComponent {
   };
 
   render() {
-    const { onClose, ...props } = this.props;
     return (
-      <Form {...props} onSubmit={this.onSubmit}>
+      <Form ref={this.props.innerRef} onSubmit={this.onSubmit}>
         <PaperInput>
           <TitleInput
-            innerRef={this.getInputRef}
+            ref={this.getInputRef}
             placeholder="Enter a title for this card..."
             value={this.state.title}
             onChange={this.onChange}
@@ -148,10 +170,8 @@ class FormAddCard extends React.PureComponent {
           />
         </PaperInput>
         <Action>
-          <Button type="submit" variant="Green">
-            Add Card
-          </Button>
-          <ButtonClose type="button" icon="Close" onClick={this.onClose} />
+          <Button type="submit">Add Card</Button>
+          <ButtonClose type="button" onClick={this.onClose} />
         </Action>
       </Form>
     );

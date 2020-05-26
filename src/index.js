@@ -19,6 +19,8 @@ class InnerList extends React.PureComponent {
       column,
       taskMap,
       index,
+      onCreateCard,
+      onRemoveCard,
       onRemoveList,
       onUpdateListTitle,
       onClipboard,
@@ -29,6 +31,8 @@ class InnerList extends React.PureComponent {
         column={column}
         tasks={tasks}
         index={index}
+        onCreateCard={onCreateCard}
+        onRemoveCard={onRemoveCard}
         onRemoveList={onRemoveList}
         onUpdateListTitle={onUpdateListTitle}
         onClipboard={onClipboard}
@@ -221,6 +225,77 @@ class App extends React.Component {
     navigator.clipboard.writeText(out);
   };
 
+  onCreateCard = (colId) => (title) => {
+    console.log(colId, title);
+
+    // Update tasks
+    let newTaskId;
+    let i = 1;
+    while (true) {
+      newTaskId = "task-" + i;
+      if (!this.state.tasks[newTaskId]) {
+        break;
+      }
+      i++;
+    }
+    const newTask = {
+      id: newTaskId,
+      content: title,
+    };
+    const newTasks = {
+      ...this.state.tasks,
+      [newTask.id]: newTask,
+    };
+
+    // Update column
+    let newColumn = this.state.columns[colId];
+    newColumn.taskIds.push(newTaskId);
+
+    const newColumns = {
+      ...this.state.columns,
+      [newColumn.id]: newColumn,
+    };
+
+    const newState = {
+      tasks: newTasks,
+      columns: newColumns,
+      columnOrder: this.state.columnOrder,
+    };
+
+    console.log(newState);
+    this.setState(newState);
+  };
+
+  onRemoveCard = (colId) => (cardId) => {
+    console.log(colId, cardId);
+
+    // Remove task
+    let newtasks = this.state.tasks;
+    delete newtasks[cardId];
+
+    const oldCol = this.state.columns[colId];
+
+    // Moving from one list to another
+    const newTaskIds = Array.from(oldCol.taskIds);
+    const ind = newTaskIds.indexOf(cardId);
+    newTaskIds.splice(ind, 1);
+    const newCol = {
+      ...oldCol,
+      taskIds: newTaskIds,
+    };
+
+    const newState = {
+      tasks: newtasks,
+      columns: {
+        ...this.state.columns,
+        [newCol.id]: newCol,
+      },
+      columnOrder: this.state.columnOrder,
+    };
+    console.log(newState);
+    this.setState(newState);
+  };
+
   render() {
     return (
       <div>
@@ -258,6 +333,8 @@ class App extends React.Component {
                       column={column}
                       taskMap={this.state.tasks}
                       index={index}
+                      onCreateCard={this.onCreateCard(column.id)}
+                      onRemoveCard={this.onRemoveCard(column.id)}
                       onRemoveList={this.onRemoveList(column.id)}
                       onUpdateListTitle={this.onUpdateList(column)}
                       onClipboard={this.onClipboard}
