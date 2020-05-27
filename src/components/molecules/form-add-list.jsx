@@ -3,27 +3,20 @@ import styled from "styled-components";
 import { string, func, node } from "prop-types";
 import { ifProp } from "styled-tools";
 
-// import getPaletteColor from '../../../services/getPaletteColor'
-// import { Button, Input } from "../atoms";
-
-// const Form = styled.form`
-//   display: flex;
-//   flex-direction: column;
-//   background: ${getPaletteColor('shades', 200)};
-//   height: auto;
-//   width: 100%;
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   padding: 4px;
-//   border-radius: 3px;
-//   transition: height 0.3s ease;
-// `
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 7px;
+  width: 300px;
+`;
 
 const Input = styled.input`
   border-radius: 3px;
+  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
   padding: 8px 8px;
   outline: none;
+  overflow: hidden;
+  border-width: 0px;
   height: ${ifProp("small", "32px", "48px")};
   font-size: ${ifProp("small", "14px", "16px")};
 
@@ -34,19 +27,9 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button``;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 4px;
-  border-radius: 3px;
-  transition: height 0.3s ease;
+const Button = styled.button`
+  background: none;
+  border: none;
 `;
 
 const Action = styled.div`
@@ -66,7 +49,8 @@ const Action = styled.div`
 // `
 
 const ButtonClose = styled(Button)`
-  background: transparent;
+  background: none;
+  border: none;
 `;
 
 class FormAddInline extends React.PureComponent {
@@ -109,7 +93,9 @@ class FormAddInline extends React.PureComponent {
           <Button type="submit" variant="Green">
             {actionContent}
           </Button>
-          <ButtonClose type="button" icon="Close" onClick={onClose} />
+          <ButtonClose type="button" icon="Close" onClick={onClose}>
+            Close
+          </ButtonClose>
         </Action>
       </Form>
     );

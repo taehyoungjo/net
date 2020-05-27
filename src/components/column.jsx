@@ -10,27 +10,45 @@ import FormAddCard from "./molecules/form-add-card";
 
 const Container = styled.div`
   margin: 8px;
-  border: 1px solid lightgrey;
-  background-color: white;
-  border-radius: 2px;
-  width: 220px;
-
-  display: flex;
-  flex-direction: column;
-
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
+  display: table;
 `;
 
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
   background-color: ${(props) =>
-    props.isDraggingOver ? "lightgrey" : "white"};
+    props.isDraggingOver ? "lightgrey" : "#f2f2f2"};
   flex-grow: 1;
   min-height: 26px;
-  width: 218px;
+  width: 300px;
+  border-radius: 5px;
+
+  overflow-y: auto;
+  max-height: 50vh;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 4px;
+  }
+
+  /* 
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  */
 `;
 
 const ScrollView = styled.div`
@@ -117,9 +135,6 @@ export default class Column extends React.Component {
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
         {(provided) => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
-            {/* <Title {...provided.dragHandleProps}>
-              {this.props.column.title}
-            </Title> */}
             <ScrollView>
               <ListHeader
                 title={this.props.column.title}
@@ -127,11 +142,11 @@ export default class Column extends React.Component {
                 onRemove={this.props.onRemoveList}
                 dragHandleProps={provided.dragHandleProps}
                 onClipboard={this.props.onClipboard(this.props.column)}
+                onOpenAll={this.props.onOpenAll}
               />
               <Droppable droppableId={this.props.column.id} type="task">
                 {(provided, snapshot) => (
                   <TaskList
-                    //   innerRef={provided.innerRef}
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     isDraggingOver={snapshot.isDraggingOver}
@@ -143,7 +158,6 @@ export default class Column extends React.Component {
                       tasks={this.props.tasks}
                       onRemoveCard={this.onRemoveCard}
                     />
-                    {provided.placeholder}
                     {this.state.open && (
                       <FormAddCard
                         innerRef={this.getFormRef}
@@ -151,11 +165,11 @@ export default class Column extends React.Component {
                         onSubmit={this.onAddCard}
                       />
                     )}
+                    {provided.placeholder}
                   </TaskList>
                 )}
               </Droppable>
             </ScrollView>
-
             {!this.state.open && (
               <ListFooter onClick={this.setFormState(true)} />
             )}

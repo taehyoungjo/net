@@ -6,11 +6,11 @@ const ActionPlaceholder = styled.div`
   display: flex;
   align-items: center;
   padding: 7px;
-  width: 220px;
+  width: 300px;
 `;
 
 const PlaceholderAddAction = ({ actionContent, ...props }) => {
-  return <ActionPlaceholder {...props}>+ Add a list</ActionPlaceholder>;
+  return <ActionPlaceholder {...props}>+ {actionContent}</ActionPlaceholder>;
 };
 
 PlaceholderAddAction.propTypes = {

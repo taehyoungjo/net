@@ -4,7 +4,6 @@ import styled from "styled-components";
 import PlaceholderAddAction from "./placeholder-add-action";
 
 const Container = styled.div`
-  min-height: 40px;
   display: flex;
   align-items: center;
   cursor: pointer;

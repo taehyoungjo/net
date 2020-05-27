@@ -7,14 +7,22 @@ import PlaceholderAddAction from "./placeholder-add-action";
 
 const Container = styled.div`
   margin: 8px;
-  border: 1px solid lightgrey;
-  background-color: white;
-  border-radius: 2px;
-  width: 220px;
-  height: 36px;
-
-  display: flex;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  width: 300px;
+  display: table;
   flex-direction: column;
+
+  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
+`;
+
+const PlaceholderWrapper = styled.div`
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.15);
+  }
 `;
 
 class AddListWrapper extends React.Component {
@@ -65,10 +73,14 @@ class AddListWrapper extends React.Component {
   render() {
     return (
       <Container ref={this.getContainerRef}>
-        <PlaceholderAddAction
-          actionContent="Add another list"
-          onClick={this.setFormState(true)}
-        />
+        {!this.state.isOpen && (
+          <PlaceholderWrapper>
+            <PlaceholderAddAction
+              actionContent="Add another list"
+              onClick={this.setFormState(true)}
+            />
+          </PlaceholderWrapper>
+        )}
         {this.state.isOpen && (
           <FormAddList
             actionContent="Add List"

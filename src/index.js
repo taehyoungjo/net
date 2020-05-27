@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import "@atlaskit/css-reset";
+import "./App.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import initialData from "./initial-data";
 import Column from "./components/column";
@@ -10,7 +11,8 @@ import AddListWrapper from "./components/molecules/add-list-wrapper";
 
 const Container = styled.div`
   display: flex;
-  padding: 25vh 15vh 0;
+  padding: 25vh 15vh 0 15vh;
+  width: max-content;
 `;
 
 class InnerList extends React.PureComponent {
@@ -24,6 +26,7 @@ class InnerList extends React.PureComponent {
       onRemoveList,
       onUpdateListTitle,
       onClipboard,
+      onOpenAll,
     } = this.props;
     const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
     return (
@@ -36,6 +39,7 @@ class InnerList extends React.PureComponent {
         onRemoveList={onRemoveList}
         onUpdateListTitle={onUpdateListTitle}
         onClipboard={onClipboard}
+        onOpenAll={onOpenAll}
       />
     );
   }
@@ -296,6 +300,12 @@ class App extends React.Component {
     this.setState(newState);
   };
 
+  onOpenAll = (column) => () => {
+    for (var i = 0; i < column.taskIds.length; i++) {
+      window.open(this.state.tasks[column.taskIds[i]].content);
+    }
+  };
+
   render() {
     return (
       <div>
@@ -315,18 +325,6 @@ class App extends React.Component {
                 <AddListWrapper onCreate={this.onCreateList} />
                 {this.state.columnOrder.map((columnId, index) => {
                   const column = this.state.columns[columnId];
-                  // const tasks = column.taskIds.map(
-                  //   (taskId) => this.state.tasks[taskId]
-                  // );
-
-                  // return (
-                  //   <Column
-                  //     key={column.id}
-                  //     column={column}
-                  //     tasks={tasks}
-                  //     index={index}
-                  //   />
-                  // );
                   return (
                     <InnerList
                       key={column.id}
@@ -338,6 +336,7 @@ class App extends React.Component {
                       onRemoveList={this.onRemoveList(column.id)}
                       onUpdateListTitle={this.onUpdateList(column)}
                       onClipboard={this.onClipboard}
+                      onOpenAll={this.onOpenAll(column)}
                     />
                   );
                 })}

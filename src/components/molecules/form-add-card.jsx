@@ -23,10 +23,14 @@ const Action = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button``;
+const Button = styled.button`
+  background: none;
+  border: none;
+`;
 
 const ButtonClose = styled(Button)`
-  background: transparent;
+  background: none;
+  border: none;
 `;
 
 const Paper = styled.div`
@@ -171,7 +175,9 @@ class FormAddCard extends React.PureComponent {
         </PaperInput>
         <Action>
           <Button type="submit">Add Card</Button>
-          <ButtonClose type="button" onClick={this.onClose} />
+          <ButtonClose type="button" onClick={this.onClose}>
+            Close
+          </ButtonClose>
         </Action>
       </Form>
     );

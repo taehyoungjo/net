@@ -7,8 +7,7 @@ const Container = styled.div`
   align-items: center;
   margin-bottom: 2px;
   flex: 0 0 auto;
-  padding: 12px 68px 10px 8px;
-  min-height: 22px;
+  padding: 12px ${(props) => (props.showButtons ? "68px" : "8px")} 10px 8px;
   position: relative;
 `;
 
@@ -36,17 +35,16 @@ const TitleInput = styled.textarea`
   background: transparent;
   max-height: 256px;
   min-height: 20px;
-  height: 26px;
   resize: none;
   border: 1px solid transparent;
   box-shadow: none;
-  font-weight: 700;
+  font-weight: 600;
   overflow: hidden;
   word-wrap: break-word;
   margin-top: -4px;
-  padding: 4px 7px;
+  padding: 0px 0px;
   &:focus {
-    background: rgba(255, 255, 255, 0.85);
+    background: white;
   }
 `;
 
@@ -54,20 +52,32 @@ const TitleInput = styled.textarea`
 
 // `;
 
-const Button = styled.button``;
+const Button = styled.button`
+  ${(props) => (props.showButtons ? "" : "display:none;")}
+`;
+
+const ButtonOpenAll = styled(Button)`
+  position: absolute;
+  top: 4px;
+  right: 52px;
+  background: none;
+  border: none;
+`;
 
 const ButtonClip = styled(Button)`
   position: absolute;
   top: 4px;
-  right: 20px;
-  background: transparent;
+  right: 28px;
+  background: none;
+  border: none;
 `;
 
 const ButtonRemove = styled(Button)`
   position: absolute;
   top: 4px;
   right: 4px;
-  background: transparent;
+  background: none;
+  border: none;
 `;
 
 class ListHeader extends React.PureComponent {
@@ -93,6 +103,7 @@ class ListHeader extends React.PureComponent {
     title: this.props.title,
     prevTitle: this.props.title,
     showTarget: true,
+    showButtons: false,
   };
 
   input = null;
@@ -140,11 +151,24 @@ class ListHeader extends React.PureComponent {
     }
   };
 
+  hoverHandler = () => {
+    this.setState({ showButtons: true });
+  };
+
+  outHandler = () => {
+    this.setState({ showButtons: false });
+  };
+
   render() {
-    const { title, showTarget } = this.state;
-    const { onRemove, onClipboard, dragHandleProps } = this.props;
+    const { title, showTarget, showButtons } = this.state;
+    const { onRemove, onClipboard, onOpenAll, dragHandleProps } = this.props;
     return (
-      <Container {...dragHandleProps}>
+      <Container
+        onMouseEnter={this.hoverHandler}
+        onMouseLeave={this.outHandler}
+        showButtons={showButtons}
+        {...dragHandleProps}
+      >
         {showTarget && <ClickTarget onClick={this.onTargetClick} />}
         <TitleInput
           spellCheck={false}
@@ -156,8 +180,27 @@ class ListHeader extends React.PureComponent {
           onBlur={this.onBlur}
           onKeyDown={this.handleKeydown}
         />
-        <ButtonClip type="button" onClick={onClipboard} />
-        <ButtonRemove type="button" onClick={onRemove} />
+        <ButtonOpenAll
+          type="button"
+          showButtons={showButtons}
+          onClick={onOpenAll}
+        >
+          O
+        </ButtonOpenAll>
+        <ButtonClip
+          type="button"
+          showButtons={showButtons}
+          onClick={onClipboard}
+        >
+          C
+        </ButtonClip>
+        <ButtonRemove
+          type="button"
+          showButtons={showButtons}
+          onClick={onRemove}
+        >
+          X
+        </ButtonRemove>
       </Container>
     );
   }
