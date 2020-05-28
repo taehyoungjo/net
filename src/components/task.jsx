@@ -59,10 +59,15 @@ export default class Task extends React.Component {
     this.setState({ showButtons: false });
   };
 
-  linkHandler = () => {
-    // for new tab
-    // window.open(this.props.task.content, '_blank')
-    window.location.href = this.props.task.content
+  newTabHandler = (e) => {
+    if (e.button === 0) {
+      // default click redirects
+      window.location.href = this.props.task.content
+    }
+    if (e.button === 1) {
+      // middle mouse button click opens new tab
+      window.open(this.props.task.content, '_blank')
+    }
   }
 
   render() {
@@ -78,7 +83,7 @@ export default class Task extends React.Component {
             isDragging={snapshot.isDragging}
             onMouseEnter={this.hoverHandler}
             onMouseLeave={this.outHandler}
-            onClick={this.linkHandler}
+            onMouseDown={this.linkHandler}
           >
             {/* <a href={this.props.task.content} target="_blank">
               {this.props.task.content}
