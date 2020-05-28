@@ -59,15 +59,27 @@ export default class Task extends React.Component {
     this.setState({ showButtons: false });
   };
 
-  linkHandler = (e) => {
-    if (e.button === 0) {
-      // default click redirects
-      window.location.href = this.props.task.content
-    }
+  linkHandler = () => {
+    window.location.href = this.props.task.content
+  }
+
+  newTabHandler = (e) => {
     if (e.button === 1) {
-      // middle mouse button click opens new tab
+      // middle mouse button click
+      console.log('middle mouse click')
       window.open(this.props.task.content, '_blank')
     }
+  }
+
+  removeHandler = (e) => {
+    e.stopPropagation()
+    this.props.onRemoveCard(this.props.task.id)
+  }
+
+  clipHandler = (e) => {
+    e.stopPropagation()
+    console.log(this.props.task.content);
+    navigator.clipboard.writeText(this.props.task.content);
   }
 
   render() {
@@ -83,7 +95,8 @@ export default class Task extends React.Component {
             isDragging={snapshot.isDragging}
             onMouseEnter={this.hoverHandler}
             onMouseLeave={this.outHandler}
-            onMouseDown={this.linkHandler}
+            onClick={this.linkHandler}
+            onMouseDown={this.newTabHandler}
           >
             {/* <a href={this.props.task.content} target="_blank">
               {this.props.task.content}
@@ -101,17 +114,14 @@ export default class Task extends React.Component {
             <ButtonRemove
               type="button"
               showButtons={showButtons}
-              onClick={() => this.props.onRemoveCard(this.props.task.id)}
+              onClick={this.removeHandler}
             >
               X
             </ButtonRemove>
             <ButtonClip
               type="button"
               showButtons={showButtons}
-              onClick={() => {
-                console.log(this.props.task.content);
-                navigator.clipboard.writeText(this.props.task.content);
-              }}
+              onClick={this.clipHandler}
             >
               C
             </ButtonClip>
