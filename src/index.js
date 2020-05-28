@@ -11,7 +11,7 @@ import AddListWrapper from "./components/molecules/add-list-wrapper";
 
 const Container = styled.div`
   display: flex;
-  padding: 25vh 15vh 0 15vh;
+  padding: 25vh 15vw 0 10vw;
   width: max-content;
 `;
 

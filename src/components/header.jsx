@@ -2,7 +2,7 @@ import React from "react";
 
 const style = {
   position: "fixed",
-  left: "15vh",
+  left: "10vw",
   top: "15vh",
 };
 
