@@ -26,21 +26,55 @@
 //   columnOrder: ["column-1", "column-2", "column-3"],
 // };
 
-const lS = JSON.parse(localStorage.getItem("board"));
-const initialData = lS
-  ? lS
-  : {
-      tasks: {},
-      columns: {},
-      // Faciliate reordering of columns
-      columnOrder: [],
-    };
+// const lS = JSON.parse(localStorage.getItem("board"));
+// const initialData = lS
+//   ? lS
+//   : {
+//       tasks: {},
+//       columns: {},
+//       // Faciliate reordering of columns
+//       columnOrder: [],
+//     };
 
-// const initialData = {
-//   tasks: {},
-//   columns: {},
-//   // Faciliate reordering of columns
-//   columnOrder: [],
-// };
+/* global chrome */
 
+// function readLocalStorage(key) {
+//   return Promise((resolve, reject) => {
+//     chrome.storage.sync.get([key], function (result) {
+//       if (result) {
+//         console.log("here");
+//         resolve(1);
+//       } else {
+//         reject();
+//       }
+//     });
+//   });
+// }
+
+// async function getFromLocal(key) {
+//   let test = await readLocalStorage(key);
+//   return test;
+// }
+
+// let test = getFromLocal("test");
+// console.log(test);
+
+let initialData;
+
+function callback(lS) {
+  let x = Object.keys(lS).length;
+  initialData =
+    x === 0
+      ? {
+          tasks: {},
+          columns: {},
+          // Faciliate reordering of columns
+          columnOrder: [],
+        }
+      : lS;
+}
+
+chrome.storage.sync.get(["board"], callback);
+//const lS = JSON.parse(localStorage.getItem("board"));
+console.log("test", initialData);
 export default initialData;

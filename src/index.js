@@ -4,10 +4,13 @@ import styled from "styled-components";
 import "@atlaskit/css-reset";
 import "./App.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import initialData from "./initial-data";
+// import initialData from "./initial-data";
 import Column from "./components/column";
 import Header from "./components/header";
 import AddListWrapper from "./components/molecules/add-list-wrapper";
+
+// Keep this here for linter
+/* global chrome */
 
 const Container = styled.div`
   display: flex;
@@ -46,16 +49,82 @@ class InnerList extends React.PureComponent {
 }
 
 class App extends React.Component {
-  state = initialData;
+  state = {
+    tasks: {},
+    columns: {},
+    // Faciliate reordering of columns
+    columnOrder: [],
+  };
 
-  //   componentDidMount = () => {
-  //     const newState = JSON.parse(localStorage.getItem("board"));
-  //     this.setState(newState);
-  //     console.log(localStorage.getItem("board"));
-  //   };
+  //   constructor(props) {
+  //     super(props);
+  //     console.log("does this work?");
+  //     chrome.storage.sync.get(["board"], (result) => {
+  //       let x = Object.keys(result).length;
+  //       let newState =
+  //         x === 0
+  //           ? {
+  //               tasks: {},
+  //               columns: {},
+  //               // Faciliate reordering of columns
+  //               columnOrder: [],
+  //             }
+  //           : result;
+  //       console.log("newState", newState);
+  //     });
+  //     this.state = {
+  //       tasks: {},
+  //       columns: {},
+  //       // Faciliate reordering of columns
+  //       columnOrder: [],
+  //     };
+  //   }
+
+  componentDidMount = () => {
+    //   const newState = JSON.parse(localStorage.getItem("board"));
+    chrome.storage.sync.get(["board"], (result) => {
+      let x = Object.keys(result).length;
+      console.log(x);
+      let newState =
+        x === 0
+          ? {
+              tasks: {},
+              columns: {},
+              // Faciliate reordering of columns
+              columnOrder: [],
+            }
+          : result;
+      console.log("newState", newState);
+      this.setState(newState.board);
+    });
+
+    //   console.log(localStorage.getItem("board"));
+    chrome.storage.onChanged.addListener(this.storageChange);
+  };
+
+  storageChange = (changes, namespace) => {
+    console.log("CHANGE");
+    for (var key in changes) {
+      var storageChange = changes[key];
+      console.log(
+        'Storage key "%s" in namespace "%s" changed. ' +
+          'Old value was "%s", new value is "%s".',
+        key,
+        namespace,
+        storageChange.oldValue,
+        storageChange.newValue
+      );
+      if (key === "board") {
+        console.log(storageChange.newValue);
+        this.setState(storageChange.newValue);
+      }
+    }
+  };
 
   componentDidUpdate = () => {
-    localStorage.setItem("board", JSON.stringify(this.state));
+    // localStorage.setItem("board", JSON.stringify(this.state));
+    console.log("wow", this.state);
+    chrome.storage.sync.set({ board: this.state }, function () {});
   };
 
   onDragStart = () => {
