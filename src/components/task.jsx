@@ -59,7 +59,7 @@ export default class Task extends React.Component {
     this.setState({ showButtons: false });
   };
 
-  newTabHandler = (e) => {
+  linkHandler = (e) => {
     if (e.button === 0) {
       // default click redirects
       window.location.href = this.props.task.content
