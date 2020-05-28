@@ -3,7 +3,14 @@
   "description": "Overriding new tab",
   "version": "1.0",
   "manifest_version": 2,
-  "permissions": ["activeTab", "tabs", "management", "history", "storage"],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "management",
+    "history",
+    "storage",
+    "contextMenus"
+  ],
 
   "background": {
     "scripts": ["background.js"],

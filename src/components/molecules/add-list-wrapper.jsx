@@ -19,6 +19,7 @@ const Container = styled.div`
 const PlaceholderWrapper = styled.div`
   cursor: pointer;
   transition: background 0.3s ease;
+  border-radius: 5px;
 
   &:hover {
     background: rgba(0, 0, 0, 0.15);
