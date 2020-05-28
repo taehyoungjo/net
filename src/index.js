@@ -4,7 +4,10 @@ import styled from "styled-components";
 import "@atlaskit/css-reset";
 import "./App.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-// import initialData from "./initial-data";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Column from "./components/column";
 import Header from "./components/header";
 import AddListWrapper from "./components/molecules/add-list-wrapper";
@@ -52,7 +55,6 @@ class App extends React.Component {
   state = {
     tasks: {},
     columns: {},
-    // Faciliate reordering of columns
     columnOrder: [],
   };
 
@@ -82,28 +84,39 @@ class App extends React.Component {
 
   componentDidMount = () => {
     //   const newState = JSON.parse(localStorage.getItem("board"));
-    chrome.storage.sync.get(["board"], (result) => {
-      let x = Object.keys(result).length;
-      console.log(x);
-      let newState =
-        x === 0
-          ? {
-              tasks: {},
-              columns: {},
-              // Faciliate reordering of columns
-              columnOrder: [],
-            }
-          : result;
-      console.log("newState", newState);
-      this.setState(newState.board);
-    });
+    if (chrome.storage) {
+      chrome.storage.sync.get(["board"], (result) => {
+        let x = Object.keys(result).length;
+        console.log(x);
+        let newState =
+          x === 0
+            ? {
+                tasks: {},
+                columns: {},
+                columnOrder: [],
+              }
+            : result;
+        console.log("newState", newState);
+        this.setState(newState.board);
+      });
 
-    //   console.log(localStorage.getItem("board"));
-    chrome.storage.onChanged.addListener(this.storageChange);
+      //   console.log(localStorage.getItem("board"));
+      chrome.storage.onChanged.addListener(this.storageChange);
+    } else {
+      const newState = JSON.parse(localStorage.getItem("board"));
+      if (newState === null) {
+        this.setState({
+          tasks: {},
+          columns: {},
+          columnOrder: [],
+        });
+      } else {
+        this.setState(newState);
+      }
+    }
   };
 
   storageChange = (changes, namespace) => {
-    console.log("CHANGE");
     for (var key in changes) {
       var storageChange = changes[key];
       console.log(
@@ -124,7 +137,11 @@ class App extends React.Component {
   componentDidUpdate = () => {
     // localStorage.setItem("board", JSON.stringify(this.state));
     console.log("wow", this.state);
-    chrome.storage.sync.set({ board: this.state }, function () {});
+    if (chrome.storage) {
+      chrome.storage.sync.set({ board: this.state }, function () {});
+    } else {
+      localStorage.setItem("board", JSON.stringify(this.state));
+    }
   };
 
   onDragStart = () => {
@@ -296,6 +313,16 @@ class App extends React.Component {
     }
     console.log(out);
     navigator.clipboard.writeText(out);
+
+    const options = {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      pauseOnHover: true,
+      progress: undefined,
+      draggable: true,
+    };
+    toast("Copied to clipboard!", options);
   };
 
   onCreateCard = (colId) => (title) => {
@@ -414,6 +441,7 @@ class App extends React.Component {
             )}
           </Droppable>
         </DragDropContext>
+        <ToastContainer />
       </div>
     );
   }

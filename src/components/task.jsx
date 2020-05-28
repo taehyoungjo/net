@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   border-radius: 5px;
@@ -60,27 +61,36 @@ export default class Task extends React.Component {
   };
 
   linkHandler = () => {
-    window.location.href = this.props.task.content
-  }
+    window.location.href = this.props.task.content;
+  };
 
   newTabHandler = (e) => {
     if (e.button === 1) {
       // middle mouse button click
-      console.log('middle mouse click')
-      window.open(this.props.task.content, '_blank')
+      console.log("middle mouse click");
+      window.open(this.props.task.content, "_blank");
     }
-  }
+  };
 
   removeHandler = (e) => {
-    e.stopPropagation()
-    this.props.onRemoveCard(this.props.task.id)
-  }
+    e.stopPropagation();
+    this.props.onRemoveCard(this.props.task.id);
+  };
 
   clipHandler = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     console.log(this.props.task.content);
     navigator.clipboard.writeText(this.props.task.content);
-  }
+    const options = {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      pauseOnHover: true,
+      progress: undefined,
+      draggable: true,
+    };
+    toast("Copied to clipboard!", options);
+  };
 
   render() {
     const { showButtons } = this.state;

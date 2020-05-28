@@ -160,7 +160,7 @@ function sendTab(url) {
       };
       console.log(newTasks);
 
-      let firstColId = parsed.columns[Object.keys(parsed.columns)[0]].id;
+      let firstColId = parsed.columnOrder[0];
 
       // update columns
       parsed.columns[firstColId].taskIds.unshift(taskId);
@@ -253,10 +253,11 @@ chrome.contextMenus.onClicked.addListener(function (info, tabs) {
 chrome.runtime.onStartup.addListener(function () {
   console.log("We just started up");
   // window.open()
-  chrome.storage.sync.get(["openOnStartUp"], function (result) {
-    // if (result == true) {
-    chrome.runtime.openOptionsPage();
-    // }
+  chrome.storage.sync.get(["options"], function (result) {
+    let options = result.options;
+    if (Object.keys(options).length === 0 || options.openOnLaunch) {
+      chrome.runtime.openOptionsPage();
+    }
   });
 });
 

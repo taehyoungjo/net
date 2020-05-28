@@ -1,31 +1,38 @@
-let modalDiv = document.createElement("div");
-document.body.appendChild(modalDiv);
-modalDiv.innerHTML = "Saved to Net!";
-modalDiv.style.position = "fixed";
-modalDiv.style.backgroundColor = "lightgrey";
-modalDiv.style.right = "20px";
-modalDiv.style.top = "20px";
-modalDiv.style.zIndex = "16777271";
-modalDiv.style.padding = "8px 16px";
-modalDiv.style.fontWeight = "600";
-modalDiv.style.fontSize = "16px";
-modalDiv.style.boxShadow = "0 1px 3px hsla(0,0%,0%,0.2)";
-modalDiv.style.borderRadius = "4px";
+function createDiv() {
+  let modalDiv = document.createElement("div");
+  document.body.appendChild(modalDiv);
+  modalDiv.innerHTML = "Saved to Net!";
+  modalDiv.style.position = "fixed";
+  modalDiv.style.backgroundColor = "lightgrey";
+  modalDiv.style.right = "20px";
+  modalDiv.style.top = "20px";
+  modalDiv.style.zIndex = "16777271";
+  modalDiv.style.padding = "8px 16px";
+  modalDiv.style.fontWeight = "600";
+  modalDiv.style.fontSize = "16px";
+  modalDiv.style.boxShadow = "0 1px 3px hsla(0,0%,0%,0.2)";
+  modalDiv.style.borderRadius = "4px";
+  modalDiv.style.fontFamily = "Arial";
+  modalDiv.style.color = "darkgrey";
 
-document.getElementsByTagName("body")[0].appendChild(modalDiv);
+  document.getElementsByTagName("body")[0].appendChild(modalDiv);
 
-function fade() {
-  var element = modalDiv;
-  var op = 1; // initial opacity
-  var timer = setInterval(function () {
-    if (op <= 0.1) {
-      clearInterval(timer);
-      element.style.display = "none";
-    }
-    element.style.opacity = op;
-    element.style.filter = "alpha(opacity=" + op * 100 + ")";
-    op -= op * 0.1;
-  }, 50);
+  function fade() {
+    var element = modalDiv;
+    var op = 1; // initial opacity
+    var timer = setInterval(function () {
+      if (op <= 0.1) {
+        clearInterval(timer);
+        document.body.removeChild(modalDiv);
+        element.style.display = "none";
+      }
+      element.style.opacity = op;
+      element.style.filter = "alpha(opacity=" + op * 100 + ")";
+      op -= op * 0.1;
+    }, 50);
+  }
+
+  setTimeout(fade, 3000);
 }
 
-setTimeout(fade, 3000);
+createDiv();
