@@ -59,6 +59,29 @@ export default class Task extends React.Component {
     this.setState({ showButtons: false });
   };
 
+  linkHandler = () => {
+    window.location.href = this.props.task.content
+  }
+
+  newTabHandler = (e) => {
+    if (e.button === 1) {
+      // middle mouse button click
+      console.log('middle mouse click')
+      window.open(this.props.task.content, '_blank')
+    }
+  }
+
+  removeHandler = (e) => {
+    e.stopPropagation()
+    this.props.onRemoveCard(this.props.task.id)
+  }
+
+  clipHandler = (e) => {
+    e.stopPropagation()
+    console.log(this.props.task.content);
+    navigator.clipboard.writeText(this.props.task.content);
+  }
+
   render() {
     const { showButtons } = this.state;
 
@@ -72,6 +95,8 @@ export default class Task extends React.Component {
             isDragging={snapshot.isDragging}
             onMouseEnter={this.hoverHandler}
             onMouseLeave={this.outHandler}
+            onClick={this.linkHandler}
+            onMouseDown={this.newTabHandler}
           >
             {/* <a href={this.props.task.content} target="_blank">
               {this.props.task.content}
@@ -89,17 +114,14 @@ export default class Task extends React.Component {
             <ButtonRemove
               type="button"
               showButtons={showButtons}
-              onClick={() => this.props.onRemoveCard(this.props.task.id)}
+              onClick={this.removeHandler}
             >
               X
             </ButtonRemove>
             <ButtonClip
               type="button"
               showButtons={showButtons}
-              onClick={() => {
-                console.log(this.props.task.content);
-                navigator.clipboard.writeText(this.props.task.content);
-              }}
+              onClick={this.clipHandler}
             >
               C
             </ButtonClip>
