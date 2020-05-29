@@ -10,6 +10,7 @@ import FormAddCard from "./molecules/form-add-card";
 
 const Container = styled.div`
   margin: 8px;
+  transition: background-color 0.2s ease;
   background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   width: 300px;
@@ -35,17 +36,23 @@ const TaskList = styled.div`
   }
 
   &::-webkit-scrollbar-track {
+    transition: background-color 0.2s ease;
+
     background: ${({ theme }) => theme.bgList};
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
+    transition: background-color 0.2s ease;
+
     background: ${({ theme }) => theme.bgScroll};
     border-radius: 4px;
   }
 
   /* 
   &::-webkit-scrollbar-thumb:hover {
+    transition: background-color 0.2s ease;
+
     background: ${({ theme }) => theme.bgScroll};
   }
   */

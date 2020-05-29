@@ -7,6 +7,7 @@ import PlaceholderAddAction from "./placeholder-add-action";
 
 const Container = styled.div`
   margin: 8px;
+  transition: background-color 0.2s ease;
   background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   width: 300px;

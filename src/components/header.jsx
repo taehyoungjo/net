@@ -21,6 +21,7 @@ const SettingsBox = styled.div`
   vertical-align: top;
   margin-left: 24px;
 
+  transition: background-color 0.2s ease;
   background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
@@ -99,6 +100,29 @@ export default class Header extends React.Component {
     }
   };
 
+  themeHandlerStorage = (value) => () => {
+    this.props.themeHandler(value);
+    if (chrome.storage) {
+      chrome.storage.sync.set(
+        {
+          options: {
+            openOnlaunch: this.state.openOnLaunch,
+            theme: value,
+          },
+        },
+        function () {}
+      );
+    } else {
+      localStorage.setItem(
+        "options",
+        JSON.stringify({
+          openOnlaunch: this.state.openOnLaunch,
+          theme: value,
+        })
+      );
+    }
+  };
+
   render() {
     return (
       <Wrapper>
@@ -117,6 +141,7 @@ export default class Header extends React.Component {
             <Settings
               toggleOpenOnLaunch={this.toggleOpenOnLaunch}
               openOnLaunch={this.state.openOnLaunch}
+              themeHandler={this.themeHandlerStorage}
             />
           ) : (
             <SettingsContents>

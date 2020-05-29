@@ -132,11 +132,26 @@ class App extends React.Component {
   };
 
   componentDidUpdate = () => {
-    console.log(this.state);
     if (chrome.storage) {
-      chrome.storage.sync.set({ board: this.state }, function () {});
+      chrome.storage.sync.set(
+        {
+          board: {
+            tasks: this.state.tasks,
+            columns: this.state.columns,
+            columnOrder: this.state.columnOrder,
+          },
+        },
+        function () {}
+      );
     } else {
-      localStorage.setItem("board", JSON.stringify(this.state));
+      localStorage.setItem(
+        "board",
+        JSON.stringify({
+          tasks: this.state.tasks,
+          columns: this.state.columns,
+          columnOrder: this.state.columnOrder,
+        })
+      );
     }
   };
 
@@ -522,12 +537,19 @@ class App extends React.Component {
     }
   };
 
+  themeHandler = (value) => {
+    this.setState({
+      ...this.state,
+      theme: value,
+    });
+  };
+
   render() {
     return (
       <div>
         <ThemeProvider theme={this.state.theme}>
           <GlobalStyles />
-          <Header />
+          <Header themeHandler={this.themeHandler} />
           <DragDropContext
             onDragStart={this.onDragStart}
             onDragUpdate={this.onDragUpdate}
