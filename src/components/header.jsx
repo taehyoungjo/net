@@ -13,6 +13,7 @@ const Wrapper = styled.div`
 
 const Logo = styled.h1`
   display: inline;
+  color: black;
 `;
 
 const SettingsBox = styled.div`
@@ -27,6 +28,10 @@ const SettingsBox = styled.div`
 
 const SettingsContents = styled.h4`
   padding: 8px;
+`;
+
+const Icon = styled.img`
+  height: 1em;
 `;
 
 export default class Header extends React.Component {
@@ -97,10 +102,11 @@ export default class Header extends React.Component {
     return (
       <Wrapper>
         <Logo>
-          Net{" "}
-          <span role="img" aria-label="net">
+          net{" "}
+          {/* <span role="img" aria-label="net">
             🥅
-          </span>
+          </span> */}
+          <Icon src={process.env.PUBLIC_URL + '/icons8-sport-net-50.png'}/>
         </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}
@@ -113,10 +119,7 @@ export default class Header extends React.Component {
             />
           ) : (
             <SettingsContents>
-              {" "}
-              <span role="img" aria-label="gear">
-                ⚙️
-              </span>
+              <Icon src={process.env.PUBLIC_URL + '/icons8-settings-50.png'}/>
             </SettingsContents>
           )}
         </SettingsBox>

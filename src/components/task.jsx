@@ -47,6 +47,10 @@ const ButtonRemove = styled(Button)`
   right: 4px;
 `;
 
+const IconButton = styled.img`
+  height: 1em;
+`;
+
 export default class Task extends React.Component {
   state = {
     showButtons: false,
@@ -133,16 +137,14 @@ export default class Task extends React.Component {
               showButtons={showButtons}
               onClick={this.removeHandler}
             >
-              X
+              <IconButton src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
             </ButtonRemove>
             <ButtonClip
               type="button"
               showButtons={showButtons}
               onClick={this.clipHandler}
             >
-              <span role="img" aria-label="clipboard">
-                📋
-              </span>
+              <IconButton src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
             </ButtonClip>
           </Container>
         )}

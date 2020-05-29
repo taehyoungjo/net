@@ -80,6 +80,10 @@ const ButtonRemove = styled(Button)`
   border: none;
 `;
 
+const Icon = styled.img`
+  height: 1em;
+`;
+
 class ListHeader extends React.PureComponent {
   static propTypes = {
     title: string.isRequired,
@@ -185,25 +189,21 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
-          <span role="img" aria-label="party popper">
-            🎉
-          </span>
+          <Icon src={process.env.PUBLIC_URL + '/open.png'}/>
         </ButtonOpenAll>
         <ButtonClip
           type="button"
           showButtons={showButtons}
           onClick={onClipboard}
         >
-          <span role="img" aria-label="clipboard">
-            📋
-          </span>
+          <Icon src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
         </ButtonClip>
         <ButtonRemove
           type="button"
           showButtons={showButtons}
           onClick={onRemove}
         >
-          X
+          <Icon src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
         </ButtonRemove>
       </Container>
     );
