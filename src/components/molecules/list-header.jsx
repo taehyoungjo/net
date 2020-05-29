@@ -80,15 +80,7 @@ const ButtonRemove = styled(Button)`
   border: none;
 `;
 
-const IconClip = styled.img`
-  height: 1em;
-`;
-
-const IconOpen = styled.img`
-  height: 1em;
-`;
-
-const IconClose = styled.img`
+const Icon = styled.img`
   height: 1em;
 `;
 
@@ -197,21 +189,21 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
-          <IconOpen src={process.env.PUBLIC_URL + '/icons8-open-box-64.png'}/>
+          <Icon src={process.env.PUBLIC_URL + '/icons8-open-box-64.png'}/>
         </ButtonOpenAll>
         <ButtonClip
           type="button"
           showButtons={showButtons}
           onClick={onClipboard}
         >
-          <IconClip src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
+          <Icon src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
         </ButtonClip>
         <ButtonRemove
           type="button"
           showButtons={showButtons}
           onClick={onRemove}
         >
-          <IconClose src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
+          <Icon src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
         </ButtonRemove>
       </Container>
     );
