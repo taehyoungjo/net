@@ -82,18 +82,34 @@ class App extends React.Component {
     if (chrome.storage) {
       chrome.storage.sync.get(["board"], (result) => {
         let x = Object.keys(result).length;
-        let newState =
-          x === 0
-            ? {
-                ...this.state,
-                tasks: {},
-                columns: {},
-                columnOrder: [],
-              }
-            : result;
-        this.setState(newState.board);
+        chrome.storage.sync.get(["options"], (result2) => {
+          let y = Object.keys(result2).length;
+          let newState =
+            x === 0
+              ? {
+                  theme:
+                    y === 0
+                      ? gray
+                      : result2.options.theme
+                      ? result2.options.theme
+                      : gray,
+                  tasks: {},
+                  columns: {},
+                  columnOrder: [],
+                }
+              : {
+                  ...result.board,
+                  theme:
+                    y === 0
+                      ? gray
+                      : result2.options.theme
+                      ? result2.options.theme
+                      : gray,
+                };
+          console.log(newState);
+          this.setState(newState);
+        });
       });
-
       chrome.storage.onChanged.addListener(this.storageChange);
     } else {
       let newState = JSON.parse(localStorage.getItem("board"));
