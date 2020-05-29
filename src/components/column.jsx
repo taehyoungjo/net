@@ -116,9 +116,9 @@ export default class Column extends React.Component {
     this.setFormState(false)();
   };
 
-  onAddCard = (title) => {
+  onAddCard = (title, url) => {
     const { onCreateCard } = this.props;
-    onCreateCard(title);
+    onCreateCard(title, url);
   };
 
   onRemoveCard = (cardId) => {

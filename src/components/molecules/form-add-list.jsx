@@ -11,14 +11,17 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  border-radius: 3px;
-  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
-  padding: 8px 8px;
+  border-radius: 0px;
   outline: none;
   overflow: hidden;
   border-width: 0px;
   height: ${ifProp("small", "32px", "48px")};
   font-size: ${ifProp("small", "14px", "16px")};
+
+  width: 264px;
+  padding: 0px 0px 3px 0px;
+  margin: 0px 0px 3px 0px;
+  border-bottom: solid 2px lightgrey;
 
   &::placeholder {
   }
@@ -43,14 +46,56 @@ const Action = styled.div`
   align-items: center;
 `;
 
-// const ButtonClose = styled(Button)`
-//   color: ${getPaletteColor('shades', 400)};
-//   background: transparent;
-// `
-
 const ButtonClose = styled(Button)`
   background: none;
   border: none;
+`;
+
+const Textarea = styled.textarea`
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  padding: 6px 8px;
+  display: block;
+  border-radius: 3px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+  }
+`;
+
+const Paper = styled.div`
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
+  padding: 8px;
+  overflow: hidden;
+  position: relative;
+`;
+
+const PaperInput = styled(Paper)`
+  margin-bottom: 4px;
+  height: auto;
+`;
+
+const ImportInput = styled(Textarea)`
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  resize: none;
+  max-height: 162px;
+  min-height: 80px;
+  word-wrap: break-word;
+  padding: 0;
+  &:hover,
+  &:focus {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
 `;
 
 class FormAddInline extends React.PureComponent {
@@ -63,32 +108,57 @@ class FormAddInline extends React.PureComponent {
 
   state = {
     title: "",
+    imported: "",
   };
 
   onChangeTitle = (event) => {
-    this.setState({ title: event.target.value });
+    this.setState({ ...this.state, title: event.target.value });
+  };
+
+  onChangedImported = (event) => {
+    this.setState({ ...this.state, imported: event.target.value });
+    this.resizeInput();
   };
 
   onSubmit = (event) => {
     event.preventDefault();
-    const { title } = this.state;
-    if (this.props.onSubmit && Boolean(title)) {
-      this.props.onSubmit(title);
+    const { title, imported } = this.state;
+    console.log(imported);
+    if (this.props.onSubmit) {
+      this.props.onSubmit(title, imported);
     }
+  };
+
+  getInputRef = (node) => {
+    this.input = node;
+  };
+
+  resizeInput = () => {
+    this.input.style.height = "auto";
+    this.input.style.height = `${this.input.scrollHeight}px`;
   };
 
   render() {
     const { children, actionContent, onClose, ...props } = this.props;
     return (
       <Form {...props} onSubmit={this.onSubmit}>
-        <Input
-          small
-          autoFocus
-          placeholder="Enter list title..."
-          style={{ fontWeight: 700 }}
-          value={this.state.title}
-          onChange={this.onChangeTitle}
-        />
+        <PaperInput>
+          <Input
+            small
+            autoFocus
+            placeholder="Enter list title..."
+            style={{ fontWeight: 700 }}
+            value={this.state.title}
+            onChange={this.onChangeTitle}
+          />
+          <ImportInput
+            value={this.state.imported}
+            ref={this.getInputRef}
+            onChange={this.onChangedImported}
+            placeholder="Paste to import. Ex:                                              Google: https://www.google.com/          Some useful text! https://www.youtube.com/"
+          ></ImportInput>
+        </PaperInput>
+
         <Action>
           <Button type="submit" variant="Green">
             {actionContent}

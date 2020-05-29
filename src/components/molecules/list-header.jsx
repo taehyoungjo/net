@@ -7,7 +7,7 @@ const Container = styled.div`
   align-items: center;
   margin-bottom: 2px;
   flex: 0 0 auto;
-  padding: 12px ${(props) => (props.showButtons ? "68px" : "8px")} 10px 8px;
+  padding: 12px ${(props) => (props.showButtons ? "76px" : "8px")} 10px 8px;
   position: relative;
 `;
 
@@ -185,14 +185,18 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
-          O
+          <span role="img" aria-label="party popper">
+            🎉
+          </span>
         </ButtonOpenAll>
         <ButtonClip
           type="button"
           showButtons={showButtons}
           onClick={onClipboard}
         >
-          C
+          <span role="img" aria-label="clipboard">
+            📋
+          </span>
         </ButtonClip>
         <ButtonRemove
           type="button"

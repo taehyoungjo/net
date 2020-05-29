@@ -61,9 +61,9 @@ class AddListWrapper extends React.Component {
     });
   };
 
-  onSubmit = (title) => {
+  onSubmit = (title, imported) => {
     const { onCreate } = this.props;
-    onCreate(title);
+    onCreate(title, imported);
     this.setFormState(false)();
   };
 

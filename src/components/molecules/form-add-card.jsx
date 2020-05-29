@@ -1,10 +1,7 @@
 import React from "react";
 import { func } from "prop-types";
 import styled from "styled-components";
-// import debounce from "lodash.debounce";
-
-//import getPaletteColor from "../../../services/getPaletteColor";
-// import { Button, Paper, Textarea } from "../atoms";
+import { ifProp } from "styled-tools";
 
 const Form = styled.form`
   display: flex;
@@ -80,6 +77,23 @@ const TitleInput = styled(Textarea)`
   }
 `;
 
+const URLInput = styled.input`
+  width: 264px;
+  padding: 0px 0px 3px 0px;
+  margin: 0px 0px 3px 0px;
+  outline: none;
+  overflow: hidden;
+  border-width: 0px;
+  border-bottom: solid 2px lightgrey;
+  font-size: ${ifProp("small", "14px", "16px")};
+
+  &::placeholder {
+  }
+
+  &:focus {
+  }
+`;
+
 class FormAddCard extends React.PureComponent {
   static propTypes = {
     onSubmit: func,
@@ -88,27 +102,23 @@ class FormAddCard extends React.PureComponent {
 
   state = {
     title: "",
+    url: "",
   };
 
   componentDidMount() {
-    this.setState({ title: "" }, () => {});
-    this.input.focus();
+    this.setState({ title: "", url: "" }, () => {});
+    this.input2.focus();
   }
 
-  onChange = (event) => {
+  onChangeTitle = (event) => {
     const title = event.target.value;
-    // this.setState(
-    //   { title },
-    //   debounce(
-    //     () => {
-    //       window.sessionStorage.setItem("title", title);
-    //     },
-    //     50,
-    //     { leading: false, trailing: true }
-    //   )
-    // );
-    this.setState({ title });
+    this.setState({ ...this.state, title: title });
     this.resizeInput();
+  };
+
+  onChangeURL = (event) => {
+    const url = event.target.value;
+    this.setState({ ...this.state, url: url });
   };
 
   onClose = () => {
@@ -125,8 +135,12 @@ class FormAddCard extends React.PureComponent {
 
     if (event.which === 13) {
       event.preventDefault();
-      if (this.props.onSubmit && Boolean(this.state.title)) {
-        this.props.onSubmit(this.state.title);
+
+      if (
+        this.props.onSubmit &&
+        (Boolean(this.state.title) || Boolean(this.state.url))
+      ) {
+        this.props.onSubmit(this.state.title, this.state.url);
         this.clearValue();
       }
     }
@@ -136,21 +150,28 @@ class FormAddCard extends React.PureComponent {
     this.input = node;
   };
 
+  getInputRef2 = (node) => {
+    this.input2 = node;
+  };
+
   resizeInput = () => {
     this.input.style.height = "auto";
     this.input.style.height = `${this.input.scrollHeight}px`;
   };
 
   clearValue = () => {
-    this.setState({ title: "" }, () => {
-      this.input.scrollIntoView();
+    this.setState({ title: "", url: "" }, () => {
+      this.input2.scrollIntoView();
     });
   };
 
   onSubmit = (event) => {
     event.preventDefault();
-    if (this.props.onSubmit && Boolean(this.state.title)) {
-      this.props.onSubmit(this.state.title);
+    if (
+      this.props.onSubmit &&
+      (Boolean(this.state.title) || Boolean(this.state.url))
+    ) {
+      this.props.onSubmit(this.state.title, this.state.url);
       this.clearValue();
     }
   };
@@ -159,15 +180,28 @@ class FormAddCard extends React.PureComponent {
     this.input.scrollIntoView();
   };
 
+  onFocus2 = () => {
+    this.input2.scrollIntoView();
+  };
+
   render() {
     return (
       <Form ref={this.props.innerRef} onSubmit={this.onSubmit}>
         <PaperInput>
+          <URLInput
+            small
+            ref={this.getInputRef2}
+            placeholder="URL"
+            value={this.state.url}
+            onChange={this.onChangeURL}
+            onFocus={this.onFocus2}
+            onKeyDown={this.handleKeydown}
+          />
           <TitleInput
             ref={this.getInputRef}
-            placeholder="Enter a title for this card..."
+            placeholder="Enter some text..."
             value={this.state.title}
-            onChange={this.onChange}
+            onChange={this.onChangeTitle}
             onBlur={this.resizeInput}
             onKeyDown={this.handleKeydown}
             onFocus={this.onFocus}

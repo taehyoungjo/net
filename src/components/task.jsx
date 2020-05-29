@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const Text = styled.p`
   margin: 0;
-  padding-left: 24px;
+  padding-left: ${(props) => (props.icon ? "24px" : "4px")};
   padding-right: ${(props) => (props.showButtons ? "48px" : "4px")};
 `;
 
@@ -61,7 +61,8 @@ export default class Task extends React.Component {
   };
 
   linkHandler = () => {
-    window.location.href = this.props.task.content;
+    // window.location.href = this.props.task.content;
+    window.open(this.props.task.content);
   };
 
   newTabHandler = (e) => {
@@ -79,7 +80,6 @@ export default class Task extends React.Component {
 
   clipHandler = (e) => {
     e.stopPropagation();
-    console.log(this.props.task.content);
     navigator.clipboard.writeText(this.props.task.content);
     const options = {
       position: "bottom-right",
@@ -89,7 +89,7 @@ export default class Task extends React.Component {
       progress: undefined,
       draggable: true,
     };
-    toast("Copied to clipboard!", options);
+    toast("📋 Copied to clipboard!", options);
   };
 
   render() {
@@ -105,21 +105,28 @@ export default class Task extends React.Component {
             isDragging={snapshot.isDragging}
             onMouseEnter={this.hoverHandler}
             onMouseLeave={this.outHandler}
-            onClick={this.linkHandler}
+            onClick={this.props.task.content ? this.linkHandler : null}
             onMouseDown={this.newTabHandler}
           >
             {/* <a href={this.props.task.content} target="_blank">
               {this.props.task.content}
             </a> */}
-            <Icon
-              height="16"
-              width="16"
-              src={
-                "http://www.google.com/s2/favicons?domain=" +
-                this.props.task.content
-              }
-            />
-            <Text showButtons={showButtons}>{this.props.task.content}</Text>
+            {this.props.task.content ? (
+              <Icon
+                height="16"
+                width="16"
+                src={
+                  "http://www.google.com/s2/favicons?domain=" +
+                  this.props.task.content
+                }
+              />
+            ) : null}
+
+            <Text showButtons={showButtons} icon={this.props.task.content}>
+              {this.props.task.pageTitle
+                ? this.props.task.pageTitle
+                : this.props.task.content}
+            </Text>
 
             <ButtonRemove
               type="button"
@@ -133,7 +140,9 @@ export default class Task extends React.Component {
               showButtons={showButtons}
               onClick={this.clipHandler}
             >
-              C
+              <span role="img" aria-label="clipboard">
+                📋
+              </span>
             </ButtonClip>
           </Container>
         )}

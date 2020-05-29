@@ -58,36 +58,11 @@ class App extends React.Component {
     columnOrder: [],
   };
 
-  //   constructor(props) {
-  //     super(props);
-  //     console.log("does this work?");
-  //     chrome.storage.sync.get(["board"], (result) => {
-  //       let x = Object.keys(result).length;
-  //       let newState =
-  //         x === 0
-  //           ? {
-  //               tasks: {},
-  //               columns: {},
-  //               // Faciliate reordering of columns
-  //               columnOrder: [],
-  //             }
-  //           : result;
-  //       console.log("newState", newState);
-  //     });
-  //     this.state = {
-  //       tasks: {},
-  //       columns: {},
-  //       // Faciliate reordering of columns
-  //       columnOrder: [],
-  //     };
-  //   }
-
   componentDidMount = () => {
     //   const newState = JSON.parse(localStorage.getItem("board"));
     if (chrome.storage) {
       chrome.storage.sync.get(["board"], (result) => {
         let x = Object.keys(result).length;
-        console.log(x);
         let newState =
           x === 0
             ? {
@@ -96,11 +71,10 @@ class App extends React.Component {
                 columnOrder: [],
               }
             : result;
-        console.log("newState", newState);
+        console.log(newState);
         this.setState(newState.board);
       });
 
-      //   console.log(localStorage.getItem("board"));
       chrome.storage.onChanged.addListener(this.storageChange);
     } else {
       const newState = JSON.parse(localStorage.getItem("board"));
@@ -135,8 +109,7 @@ class App extends React.Component {
   };
 
   componentDidUpdate = () => {
-    // localStorage.setItem("board", JSON.stringify(this.state));
-    console.log("wow", this.state);
+    console.log(this.state);
     if (chrome.storage) {
       chrome.storage.sync.set({ board: this.state }, function () {});
     } else {
@@ -236,31 +209,151 @@ class App extends React.Component {
     this.setState(newState);
   };
 
-  onCreateList = (title) => {
-    let newColId;
-    let i = 1;
-    while (true) {
-      newColId = "column-" + i;
-      if (!this.state.columns[newColId]) {
-        break;
+  onCreateList = (title, imported) => {
+    console.log(imported);
+    if (Boolean(imported)) {
+      // Parse imported
+      let newlineSplit = imported
+        .split("\n")
+        .filter((e) => e !== "")
+        .reverse();
+      let importedArray = newlineSplit.map((e) => {
+        let colonSplit = e.split(": ");
+        let last = colonSplit[colonSplit.length - 1];
+
+        function validURL(str) {
+          var pattern = new RegExp(
+            "^(https?:\\/\\/)?" + // protocol
+            "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+            "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+            "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+            "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+              "(\\#[-a-z\\d_]*)?$",
+            "i"
+          ); // fragment locator
+          return !!pattern.test(str);
+        }
+
+        let returnObj = {};
+        // Check if last is URL
+        if (validURL(last)) {
+          // If it is, content = last, concatenate everything before
+          // if length greater than 1 and set as pageTitle
+          if (colonSplit.length > 1) {
+            let pageTitle = "";
+            let k = 0;
+            for (k = 0; k < colonSplit.length - 2; k++) {
+              pageTitle += colonSplit[k];
+              pageTitle += ": ";
+            }
+            pageTitle += colonSplit[k];
+            returnObj.pageTitle = pageTitle;
+          } else {
+            returnObj.pageTitle = "";
+          }
+          returnObj.content = last;
+        } else {
+          // If it isn't, concatenate everything if length greater
+          // than 1 and set as pageTitle
+          if (colonSplit.length > 0) {
+            let pageTitle = "";
+            let j = 0;
+            for (j = 0; j < colonSplit.length - 1; j++) {
+              pageTitle += colonSplit[j];
+              pageTitle += ": ";
+            }
+            pageTitle += colonSplit[j];
+            returnObj.pageTitle = pageTitle;
+          } else {
+            returnObj.pageTitle = "";
+          }
+          returnObj.content = "";
+        }
+        return returnObj;
+      });
+
+      console.log(importedArray);
+
+      // Create tasks
+      let tId;
+      let t = 1;
+      while (true) {
+        tId = "task-" + t;
+        if (!this.state.tasks[tId]) {
+          break;
+        }
+        t++;
       }
-      i++;
+
+      // Create tasks
+      let newTasks = {};
+      let taskIds = [];
+      let tName;
+      for (let i = 0; i < importedArray.length; i++) {
+        // Check if extension URL
+        tName = "task-" + t;
+        newTasks[tName] = {
+          id: tName,
+          content: importedArray[i].content,
+          pageTitle: importedArray[i].pageTitle,
+        };
+
+        // Add to taskIds array for column
+        taskIds.unshift(tName);
+        t++;
+      }
+      let newColId;
+      let i = 1;
+      while (true) {
+        newColId = "column-" + i;
+        if (!this.state.columns[newColId]) {
+          break;
+        }
+        i++;
+      }
+      // Create column
+      const newColumn = {
+        id: newColId,
+        title: Boolean(title) ? title : "untitled",
+        taskIds: taskIds,
+      };
+      const newState = {
+        tasks: { ...newTasks, ...this.state.tasks },
+        columns: {
+          ...this.state.columns,
+          [newColumn.id]: newColumn,
+        },
+        columnOrder: [newColId, ...this.state.columnOrder],
+      };
+      console.log(newState);
+      this.setState(newState);
+    } else {
+      let newColId;
+      let i = 1;
+      while (true) {
+        newColId = "column-" + i;
+        if (!this.state.columns[newColId]) {
+          break;
+        }
+        i++;
+      }
+      const newColumn = {
+        id: newColId,
+        title: Boolean(title) ? title : "untitled",
+        taskIds: [],
+      };
+      const newState = {
+        ...this.state,
+        columns: {
+          ...this.state.columns,
+          [newColumn.id]: newColumn,
+        },
+        columnOrder: [newColId, ...this.state.columnOrder],
+      };
+
+      console.log(newState);
+      this.setState(newState);
     }
-    const newColumn = {
-      id: newColId,
-      title: title,
-      taskIds: [],
-    };
-    const newState = {
-      ...this.state,
-      columns: {
-        ...this.state.columns,
-        [newColumn.id]: newColumn,
-      },
-      columnOrder: [newColId, ...this.state.columnOrder],
-    };
-    console.log(newState);
-    this.setState(newState);
   };
 
   onRemoveList = (listId) => () => {
@@ -278,7 +371,7 @@ class App extends React.Component {
     const newState = {
       tasks: newtasks,
       columns: newColumns,
-      columnOrder: this.state.columnOrder.filter((e) => e != listId),
+      columnOrder: this.state.columnOrder.filter((e) => e !== listId),
     };
     console.log(newState);
     this.setState(newState);
@@ -305,13 +398,21 @@ class App extends React.Component {
   };
 
   onClipboard = (column) => () => {
-    var out = "";
-    out += column.title;
+    let out = "";
+    let currTask;
     for (var i = 0; i < column.taskIds.length; i++) {
       out += "\n";
-      out += this.state.tasks[column.taskIds[i]].content;
+      currTask = this.state.tasks[column.taskIds[i]];
+      if (currTask.pageTitle) {
+        out += currTask.pageTitle;
+      }
+      if (currTask.content && currTask.pageTitle) {
+        out += ": ";
+      }
+      if (currTask.content) {
+        out += currTask.content;
+      }
     }
-    console.log(out);
     navigator.clipboard.writeText(out);
 
     const options = {
@@ -322,12 +423,10 @@ class App extends React.Component {
       progress: undefined,
       draggable: true,
     };
-    toast("Copied to clipboard!", options);
+    toast("📋 Copied to clipboard!", options);
   };
 
-  onCreateCard = (colId) => (title) => {
-    console.log(colId, title);
-
+  onCreateCard = (colId) => (title, url) => {
     // Update tasks
     let newTaskId;
     let i = 1;
@@ -340,7 +439,8 @@ class App extends React.Component {
     }
     const newTask = {
       id: newTaskId,
-      content: title,
+      content: url,
+      pageTitle: title,
     };
     const newTasks = {
       ...this.state.tasks,
@@ -367,8 +467,6 @@ class App extends React.Component {
   };
 
   onRemoveCard = (colId) => (cardId) => {
-    console.log(colId, cardId);
-
     // Remove task
     let newtasks = this.state.tasks;
     delete newtasks[cardId];

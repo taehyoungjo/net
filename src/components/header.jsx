@@ -96,7 +96,12 @@ export default class Header extends React.Component {
   render() {
     return (
       <Wrapper>
-        <Logo>Net 🥅</Logo>
+        <Logo>
+          Net{" "}
+          <span role="img" aria-label="net">
+            🥅
+          </span>
+        </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}
           onMouseLeave={this.outHandler}
@@ -107,7 +112,12 @@ export default class Header extends React.Component {
               openOnLaunch={this.state.openOnLaunch}
             />
           ) : (
-            <SettingsContents>⚙️</SettingsContents>
+            <SettingsContents>
+              {" "}
+              <span role="img" aria-label="gear">
+                ⚙️
+              </span>
+            </SettingsContents>
           )}
         </SettingsBox>
       </Wrapper>

@@ -1,8 +1,4 @@
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ color: "#3aa757" }, function () {
-    // console.log("The color is green.");
-  });
-
   const menu = {
     net: "Go to your net",
     current: "Send current tab",
@@ -30,7 +26,6 @@ function sendTabs(tabs) {
 
   chrome.storage.sync.get(["board"], function (result) {
     let parsed = result.board;
-    console.log(parsed);
     if (Object.keys(parsed).length === 0 || parsed.columnOrder.length == 0) {
       parsed = {
         tasks: {},
@@ -59,7 +54,11 @@ function sendTabs(tabs) {
     for (let i = 0; i < tabs.length; i++) {
       // Check if extension URL
       tName = "task-" + tId;
-      newTasks[tName] = { id: tName, content: tabs[i].url };
+      newTasks[tName] = {
+        id: tName,
+        content: tabs[i].url,
+        pageTitle: tabs[i].title,
+      };
 
       // Add to taskIds array for column
       taskIds.unshift(tName);
@@ -98,16 +97,17 @@ function sendTabs(tabs) {
       columnOrder: [newColName, ...parsed.columnOrder],
     };
 
-    console.log(newState);
     chrome.storage.sync.set({ board: newState }, function () {
-      console.log("value set");
+      console.log(newState);
     });
   });
 
   // localStorage.setItem("board", JSON.stringify(newState));
 }
 
-function sendTab(url) {
+function sendTab(tab) {
+  let url = tab.url;
+  let pageTitle = tab.title;
   //   let existing = localStorage.getItem("board");
 
   //   // If test is an empty array (or null?)
@@ -117,14 +117,12 @@ function sendTab(url) {
   chrome.storage.sync.get(["board"], function (result) {
     let parsed = result.board;
 
-    console.log(parsed);
-
     if (Object.keys(parsed).length === 0 || parsed.columnOrder.length == 0) {
       localStorage.setItem(
         "board",
         JSON.stringify({
           tasks: {
-            "task-1": { id: "task-1", content: url },
+            "task-1": { id: "task-1", content: url, pageTitle: pageTitle },
           },
           columns: {
             "column-1": {
@@ -152,13 +150,13 @@ function sendTab(url) {
       let newTask = {
         id: taskId,
         content: url,
+        pageTitle: pageTitle,
       };
 
       let newTasks = {
         [taskId]: newTask,
         ...parsed.tasks,
       };
-      console.log(newTasks);
 
       let firstColId = parsed.columnOrder[0];
 
@@ -171,10 +169,9 @@ function sendTab(url) {
         columns: parsed.columns,
         columnOrder: parsed.columnOrder,
       };
-      console.log(newState);
       // localStorage.setItem("board", JSON.stringify(newState));
       chrome.storage.sync.set({ board: newState }, function () {
-        console.log("value set");
+        console.log(newState);
       });
     }
 
@@ -188,13 +185,11 @@ function sendTab(url) {
 }
 
 chrome.contextMenus.onClicked.addListener(function (info, tabs) {
-  // console.log(info);
-  //   {
+  //   info = {
   //     editable: false
   //     menuItemId: "current"
   //   }
-  // console.log(tabs);
-  //   {
+  //   tabs = {
   //     active: true
   //     audible: false
   //     autoDiscardable: true
@@ -221,8 +216,8 @@ chrome.contextMenus.onClicked.addListener(function (info, tabs) {
       break;
     case "current":
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-        let url = tabs[0].url;
-        sendTab(url);
+        let tab = tabs[0];
+        sendTab(tab);
       });
 
       break;
@@ -251,8 +246,6 @@ chrome.contextMenus.onClicked.addListener(function (info, tabs) {
 });
 
 chrome.runtime.onStartup.addListener(function () {
-  console.log("We just started up");
-  // window.open()
   chrome.storage.sync.get(["options"], function (result) {
     let options = result.options;
     if (Object.keys(options).length === 0 || options.openOnLaunch) {
@@ -263,7 +256,7 @@ chrome.runtime.onStartup.addListener(function () {
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-    let url = tabs[0].url;
-    sendTab(url);
+    let tab = tabs[0];
+    sendTab(tab);
   });
 });
