@@ -11,7 +11,7 @@ const Container = styled.div`
 
   padding: 8px;
   margin-bottom: 8px;
-  background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+  background-color: ${(props) => (props.isDragging ? "white" : "white")};
 `;
 
 const Text = styled.p`
