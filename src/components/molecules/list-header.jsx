@@ -189,7 +189,7 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
-          <Icon src={process.env.PUBLIC_URL + "/open.png"} />
+          <Icon src={process.env.PUBLIC_URL + '/icons8-open-in-popup-16.png'}/>
         </ButtonOpenAll>
         <ButtonClip
           type="button"
