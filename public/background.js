@@ -248,7 +248,7 @@ chrome.contextMenus.onClicked.addListener(function (info, tabs) {
 chrome.runtime.onStartup.addListener(function () {
   chrome.storage.sync.get(["options"], function (result) {
     let options = result.options;
-    if (Object.keys(options).length === 0 || options.openOnLaunch) {
+    if (!options || options.openOnLaunch) {
       chrome.runtime.openOptionsPage();
     }
   });
