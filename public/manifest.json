@@ -1,6 +1,6 @@
 {
   "name": "net",
-  "description": "Overriding new tab",
+  "description": "Saving and organizing your links",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": [

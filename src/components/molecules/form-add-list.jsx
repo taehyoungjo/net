@@ -15,6 +15,7 @@ const Input = styled.input`
   outline: none;
   overflow: hidden;
   border-width: 0px;
+  background: transparent;
   height: ${ifProp("small", "32px", "48px")};
   font-size: ${ifProp("small", "14px", "16px")};
 
@@ -68,7 +69,7 @@ const Textarea = styled.textarea`
 `;
 
 const Paper = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.bgCard};
   border-radius: 4px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
   padding: 8px;
@@ -86,8 +87,8 @@ const ImportInput = styled(Textarea)`
   background: transparent;
   box-shadow: none;
   resize: none;
-  max-height: 162px;
-  min-height: 80px;
+  max-height: 200px;
+  min-height: 125px;
   word-wrap: break-word;
   padding: 0;
   &:hover,
@@ -95,6 +96,22 @@ const ImportInput = styled(Textarea)`
     border: none;
     background: transparent;
     box-shadow: none;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: white;
+    /* background: #f1f1f1; */
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #f1f1f1;
+    /* background: darkgray; */
+    border-radius: 4px;
   }
 `;
 
@@ -155,7 +172,7 @@ class FormAddInline extends React.PureComponent {
             value={this.state.imported}
             ref={this.getInputRef}
             onChange={this.onChangedImported}
-            placeholder="Paste to import.                                               ––                                                                Ex:                                                        Google: https://www.google.com/          Some useful text! https://www.youtube.com/"
+            placeholder="Paste to import.                                                        ––                                                                                      Ex:                                                                                Google: https://www.google.com/             Some useful text! https://www.youtube.com/"
           ></ImportInput>
         </PaperInput>
 

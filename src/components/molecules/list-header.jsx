@@ -43,14 +43,13 @@ const TitleInput = styled.textarea`
   word-wrap: break-word;
   margin-top: -4px;
   padding: 0px 0px;
+
+  color: ${({ theme }) => theme.ftPrimary};
+
   &:focus {
-    background: white;
+    background: ${({ theme }) => theme.bgCard};
   }
 `;
-
-// const TitleInput = Textarea.extend`
-
-// `;
 
 const Button = styled.button`
   ${(props) => (props.showButtons ? "" : "display:none;")}
@@ -189,21 +188,25 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
+<<<<<<< HEAD
           <Icon src={process.env.PUBLIC_URL + '/icons8-open-in-popup-16.png'}/>
+=======
+          <Icon src={process.env.PUBLIC_URL + "/open.png"} />
+>>>>>>> 60b64698adbbdf96d8d2ee0fd85228b8e1eba206
         </ButtonOpenAll>
         <ButtonClip
           type="button"
           showButtons={showButtons}
           onClick={onClipboard}
         >
-          <Icon src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
+          <Icon src={process.env.PUBLIC_URL + "/icons8-copy-50.png"} />
         </ButtonClip>
         <ButtonRemove
           type="button"
           showButtons={showButtons}
           onClick={onRemove}
         >
-          <Icon src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
+          <Icon src={process.env.PUBLIC_URL + "/icons8-multiply-50.png"} />
         </ButtonRemove>
       </Container>
     );
