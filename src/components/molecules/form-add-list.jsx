@@ -155,7 +155,7 @@ class FormAddInline extends React.PureComponent {
             value={this.state.imported}
             ref={this.getInputRef}
             onChange={this.onChangedImported}
-            placeholder="Paste to import. Ex:                                              Google: https://www.google.com/          Some useful text! https://www.youtube.com/"
+            placeholder="Paste to import.                                               ––                                                                Ex:                                                        Google: https://www.google.com/          Some useful text! https://www.youtube.com/"
           ></ImportInput>
         </PaperInput>
 

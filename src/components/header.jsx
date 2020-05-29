@@ -29,6 +29,10 @@ const SettingsContents = styled.h4`
   padding: 8px;
 `;
 
+const IconSettings = styled.img`
+  height: 1em;
+`;
+
 export default class Header extends React.Component {
   state = {
     showSettings: false,
@@ -113,10 +117,7 @@ export default class Header extends React.Component {
             />
           ) : (
             <SettingsContents>
-              {" "}
-              <span role="img" aria-label="gear">
-                ⚙️
-              </span>
+              <IconSettings src={process.env.PUBLIC_URL + '/icons8-settings-50.png'}/>
             </SettingsContents>
           )}
         </SettingsBox>
