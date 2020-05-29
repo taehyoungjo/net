@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
 const Logo = styled.h1`
   display: inline;
-  color: black;
+  color: ${({ theme }) => theme.ftPrimary};
 `;
 
 const SettingsBox = styled.div`
@@ -21,7 +21,7 @@ const SettingsBox = styled.div`
   vertical-align: top;
   margin-left: 24px;
 
-  background-color: #f2f2f2;
+  background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
 `;
@@ -106,7 +106,7 @@ export default class Header extends React.Component {
           {/* <span role="img" aria-label="net">
             🥅
           </span> */}
-          <Icon src={process.env.PUBLIC_URL + '/icons8-sport-net-50.png'}/>
+          <Icon src={process.env.PUBLIC_URL + "/icons8-sport-net-50.png"} />
         </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}
@@ -119,7 +119,7 @@ export default class Header extends React.Component {
             />
           ) : (
             <SettingsContents>
-              <Icon src={process.env.PUBLIC_URL + '/icons8-settings-50.png'}/>
+              <Icon src={process.env.PUBLIC_URL + "/icons8-settings-50.png"} />
             </SettingsContents>
           )}
         </SettingsBox>

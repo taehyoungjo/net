@@ -11,7 +11,8 @@ const Container = styled.div`
 
   padding: 8px;
   margin-bottom: 8px;
-  background-color: ${(props) => (props.isDragging ? "white" : "white")};
+  background-color: ${(props) =>
+    props.isDragging ? props.theme.bgCard : props.theme.bgHovering};
 `;
 
 const Text = styled.p`
@@ -137,14 +138,18 @@ export default class Task extends React.Component {
               showButtons={showButtons}
               onClick={this.removeHandler}
             >
-              <IconButton src={process.env.PUBLIC_URL + '/icons8-multiply-50.png'}/>
+              <IconButton
+                src={process.env.PUBLIC_URL + "/icons8-multiply-50.png"}
+              />
             </ButtonRemove>
             <ButtonClip
               type="button"
               showButtons={showButtons}
               onClick={this.clipHandler}
             >
-              <IconButton src={process.env.PUBLIC_URL + '/icons8-copy-50.png'}/>
+              <IconButton
+                src={process.env.PUBLIC_URL + "/icons8-copy-50.png"}
+              />
             </ButtonClip>
           </Container>
         )}

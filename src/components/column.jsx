@@ -10,7 +10,7 @@ import FormAddCard from "./molecules/form-add-card";
 
 const Container = styled.div`
   margin: 8px;
-  background-color: #f2f2f2;
+  background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   width: 300px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
@@ -21,7 +21,7 @@ const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
   background-color: ${(props) =>
-    props.isDraggingOver ? "lightgrey" : "#f2f2f2"};
+    props.isDraggingOver ? props.theme.bgDark : props.theme.bgList};
   flex-grow: 1;
   min-height: 26px;
   width: 300px;
@@ -35,18 +35,18 @@ const TaskList = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: ${({ theme }) => theme.bgList};
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: darkgray;
+    background: ${({ theme }) => theme.bgScroll};
     border-radius: 4px;
   }
 
   /* 
   &::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: ${({ theme }) => theme.bgScroll};
   }
   */
 `;

@@ -31,7 +31,7 @@ const ButtonClose = styled(Button)`
 `;
 
 const Paper = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.bgCard};
   border-radius: 4px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
   padding: 8px;
@@ -84,7 +84,8 @@ const URLInput = styled.input`
   outline: none;
   overflow: hidden;
   border-width: 0px;
-  border-bottom: solid 2px lightgrey;
+  background: transparent;
+  border-bottom: solid 2px ${({ theme }) => theme.bgDark};
   font-size: ${ifProp("small", "14px", "16px")};
 
   &::placeholder {

@@ -7,7 +7,7 @@ import PlaceholderAddAction from "./placeholder-add-action";
 
 const Container = styled.div`
   margin: 8px;
-  background-color: #f2f2f2;
+  background-color: ${({ theme }) => theme.bgList};
   border-radius: 5px;
   width: 300px;
   display: table;
@@ -22,7 +22,7 @@ const PlaceholderWrapper = styled.div`
   border-radius: 5px;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.15);
+    background: ${({ theme }) => theme.bgDark};
   }
 `;
 

@@ -1,8 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
+
 import "@atlaskit/css-reset";
-import "./App.css";
+
+import { gray, dark } from "./themes";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
+// import theme from "styled-theming";
+
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -19,6 +23,21 @@ const Container = styled.div`
   display: flex;
   padding: 25vh 15vw 0 10vw;
   width: max-content;
+`;
+
+export const GlobalStyles = createGlobalStyle`
+  body {
+    background: ${({ theme }) => theme.bgBody};
+    color: ${({ theme }) => theme.ftPrimary};
+  }
+
+  button {
+    color: ${({ theme }) => theme.ftPrimary};
+  }
+
+  input, select, textarea{
+    color: ${({ theme }) => theme.ftPrimary};
+  }
 `;
 
 class InnerList extends React.PureComponent {
@@ -503,43 +522,46 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header />
-        <DragDropContext
-          onDragStart={this.onDragStart}
-          onDragUpdate={this.onDragUpdate}
-          onDragEnd={this.onDragEnd}
-        >
-          <Droppable
-            droppableId="all-columns"
-            direction="horizontal"
-            type="column"
+        <ThemeProvider theme={gray}>
+          <GlobalStyles />
+          <Header />
+          <DragDropContext
+            onDragStart={this.onDragStart}
+            onDragUpdate={this.onDragUpdate}
+            onDragEnd={this.onDragEnd}
           >
-            {(provided) => (
-              <Container {...provided.droppableProps} ref={provided.innerRef}>
-                <AddListWrapper onCreate={this.onCreateList} />
-                {this.state.columnOrder.map((columnId, index) => {
-                  const column = this.state.columns[columnId];
-                  return (
-                    <InnerList
-                      key={column.id}
-                      column={column}
-                      taskMap={this.state.tasks}
-                      index={index}
-                      onCreateCard={this.onCreateCard(column.id)}
-                      onRemoveCard={this.onRemoveCard(column.id)}
-                      onRemoveList={this.onRemoveList(column.id)}
-                      onUpdateListTitle={this.onUpdateList(column)}
-                      onClipboard={this.onClipboard}
-                      onOpenAll={this.onOpenAll(column)}
-                    />
-                  );
-                })}
-                {provided.placeholder}
-              </Container>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <ToastContainer />
+            <Droppable
+              droppableId="all-columns"
+              direction="horizontal"
+              type="column"
+            >
+              {(provided) => (
+                <Container {...provided.droppableProps} ref={provided.innerRef}>
+                  <AddListWrapper onCreate={this.onCreateList} />
+                  {this.state.columnOrder.map((columnId, index) => {
+                    const column = this.state.columns[columnId];
+                    return (
+                      <InnerList
+                        key={column.id}
+                        column={column}
+                        taskMap={this.state.tasks}
+                        index={index}
+                        onCreateCard={this.onCreateCard(column.id)}
+                        onRemoveCard={this.onRemoveCard(column.id)}
+                        onRemoveList={this.onRemoveList(column.id)}
+                        onUpdateListTitle={this.onUpdateList(column)}
+                        onClipboard={this.onClipboard}
+                        onOpenAll={this.onOpenAll(column)}
+                      />
+                    );
+                  })}
+                  {provided.placeholder}
+                </Container>
+              )}
+            </Droppable>
+          </DragDropContext>
+          <ToastContainer />
+        </ThemeProvider>
       </div>
     );
   }
