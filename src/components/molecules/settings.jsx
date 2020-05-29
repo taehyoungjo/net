@@ -56,9 +56,9 @@ export default class Options extends React.Component {
             onClick={this.props.themeHandler(gray)}
           />
           <PaletteDark type="button" onClick={this.props.themeHandler(dark)} />
-          <PaletteColorful />
+          {/* <PaletteColorful />
           <PalettePastel />
-          <PaletteCool />
+          <PaletteCool /> */}
         </ColorPicker>
         <OolLabel>Open on Launch</OolLabel>
         <Ool

@@ -1,6 +1,7 @@
 import React from "react";
 import Settings from "./molecules/settings";
 import styled from "styled-components";
+import { gray, dark } from "../themes";
 
 // Keep this here for linter
 /* global chrome */
@@ -45,21 +46,22 @@ export default class Header extends React.Component {
   componentDidMount = () => {
     if (chrome.storage) {
       chrome.storage.sync.get(["options"], (result) => {
-        let x = Object.keys(result).length;
-        let newState =
-          x === 0
-            ? {
-                openOnLaunch: true,
-              }
-            : result;
+        console.log(result);
+
+        let ooL = result.hasOwnProperty("options")
+          ? result.options.hasOwnProperty("openOnLaunch")
+            ? result.options.openOnLaunch
+            : true
+          : true;
+        console.log(ooL);
         this.setState({
           showSettings: this.state.showSettings,
-          ...newState.options,
+          openOnLaunch: ooL,
         });
       });
     } else {
-      const newState = JSON.parse(localStorage.getItem("options"));
-      if (newState === null) {
+      const options = JSON.parse(localStorage.getItem("options"));
+      if (options === null) {
         this.setState({
           showSettings: this.state.showSettings,
           openOnLaunch: true,
@@ -67,7 +69,9 @@ export default class Header extends React.Component {
       } else {
         this.setState({
           showSettings: this.state.showSettings,
-          ...newState,
+          openOnLaunch: options.hasOwnProperty("openOnLaunch")
+            ? options.openOnLaunch
+            : true,
         });
       }
     }
@@ -88,25 +92,36 @@ export default class Header extends React.Component {
       openOnLaunch: newState,
     });
     if (chrome.storage) {
-      chrome.storage.sync.set(
-        { options: { openOnLaunch: newState } },
-        function () {}
-      );
+      chrome.storage.sync.get(["options"], (result2) => {
+        let theme = result2.options
+          ? result2.options.theme
+            ? result2.options.theme
+            : gray
+          : gray;
+
+        chrome.storage.sync.set(
+          { options: { openOnLaunch: newState, theme: theme } },
+          function () {}
+        );
+      });
     } else {
+      let options = JSON.parse(localStorage.getItem("options"));
+      let theme = options ? options.theme : gray;
       localStorage.setItem(
         "options",
-        JSON.stringify({ openOnLaunch: newState })
+        JSON.stringify({ openOnLaunch: newState, theme: theme })
       );
     }
   };
 
   themeHandlerStorage = (value) => () => {
     this.props.themeHandler(value);
+    console.log(this.state.openOnLaunch);
     if (chrome.storage) {
       chrome.storage.sync.set(
         {
           options: {
-            openOnlaunch: this.state.openOnLaunch,
+            openOnLaunch: this.state.openOnLaunch,
             theme: value,
           },
         },
@@ -116,7 +131,7 @@ export default class Header extends React.Component {
       localStorage.setItem(
         "options",
         JSON.stringify({
-          openOnlaunch: this.state.openOnLaunch,
+          openOnLaunch: this.state.openOnLaunch,
           theme: value,
         })
       );
