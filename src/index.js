@@ -72,38 +72,42 @@ class InnerList extends React.PureComponent {
 
 class App extends React.Component {
   state = {
+    theme: {},
     tasks: {},
     columns: {},
     columnOrder: [],
   };
 
   componentDidMount = () => {
-    //   const newState = JSON.parse(localStorage.getItem("board"));
     if (chrome.storage) {
       chrome.storage.sync.get(["board"], (result) => {
         let x = Object.keys(result).length;
         let newState =
           x === 0
             ? {
+                ...this.state,
                 tasks: {},
                 columns: {},
                 columnOrder: [],
               }
             : result;
-        console.log(newState);
         this.setState(newState.board);
       });
 
       chrome.storage.onChanged.addListener(this.storageChange);
     } else {
-      const newState = JSON.parse(localStorage.getItem("board"));
+      let newState = JSON.parse(localStorage.getItem("board"));
+      let options = JSON.parse(localStorage.getItem("options"));
+      let theme = options ? options.theme : null;
       if (newState === null) {
         this.setState({
+          theme: theme ? theme : gray,
           tasks: {},
           columns: {},
           columnOrder: [],
         });
       } else {
+        newState.theme = theme ? theme : gray;
         this.setState(newState);
       }
     }
@@ -337,6 +341,7 @@ class App extends React.Component {
         taskIds: taskIds,
       };
       const newState = {
+        ...this.state,
         tasks: { ...newTasks, ...this.state.tasks },
         columns: {
           ...this.state.columns,
@@ -344,7 +349,6 @@ class App extends React.Component {
         },
         columnOrder: [newColId, ...this.state.columnOrder],
       };
-      console.log(newState);
       this.setState(newState);
     } else {
       let newColId;
@@ -388,11 +392,11 @@ class App extends React.Component {
 
     delete newColumns[listId];
     const newState = {
+      ...this.state,
       tasks: newtasks,
       columns: newColumns,
       columnOrder: this.state.columnOrder.filter((e) => e !== listId),
     };
-    console.log(newState);
     this.setState(newState);
   };
 
@@ -412,7 +416,6 @@ class App extends React.Component {
         [newColumn.id]: newColumn,
       },
     };
-    console.log(newState);
     this.setState(newState);
   };
 
@@ -476,12 +479,12 @@ class App extends React.Component {
     };
 
     const newState = {
+      ...this.state,
       tasks: newTasks,
       columns: newColumns,
       columnOrder: this.state.columnOrder,
     };
 
-    console.log(newState);
     this.setState(newState);
   };
 
@@ -502,6 +505,7 @@ class App extends React.Component {
     };
 
     const newState = {
+      ...this.state,
       tasks: newtasks,
       columns: {
         ...this.state.columns,
@@ -509,7 +513,6 @@ class App extends React.Component {
       },
       columnOrder: this.state.columnOrder,
     };
-    console.log(newState);
     this.setState(newState);
   };
 
@@ -522,7 +525,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <ThemeProvider theme={gray}>
+        <ThemeProvider theme={this.state.theme}>
           <GlobalStyles />
           <Header />
           <DragDropContext

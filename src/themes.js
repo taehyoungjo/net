@@ -7,6 +7,7 @@ export const gray = {
   bgScroll: "darkgray",
   ftPrimary: "black",
   ftSecondary: "",
+  hueInv: "0%",
 };
 
 export const dark = {
@@ -18,4 +19,5 @@ export const dark = {
   bgScroll: "darkgray",
   ftPrimary: "white",
   ftSecondary: "",
+  hueInv: "100%",
 };

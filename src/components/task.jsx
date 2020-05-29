@@ -50,6 +50,7 @@ const ButtonRemove = styled(Button)`
 
 const IconButton = styled.img`
   height: 1em;
+  filter: invert(${({ theme }) => theme.hueInv});
 `;
 
 export default class Task extends React.Component {

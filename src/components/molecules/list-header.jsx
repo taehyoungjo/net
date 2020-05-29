@@ -81,6 +81,7 @@ const ButtonRemove = styled(Button)`
 
 const Icon = styled.img`
   height: 1em;
+  filter: invert(${({ theme }) => theme.hueInv});
 `;
 
 class ListHeader extends React.PureComponent {

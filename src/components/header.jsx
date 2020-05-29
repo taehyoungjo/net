@@ -32,6 +32,7 @@ const SettingsContents = styled.h4`
 
 const Icon = styled.img`
   height: 1em;
+  filter: invert(${({ theme }) => theme.hueInv});
 `;
 
 export default class Header extends React.Component {
