@@ -31,6 +31,8 @@ const ButtonClose = styled(Button)`
 `;
 
 const Paper = styled.div`
+  transition: background-color 0.2s ease;
+
   background: ${({ theme }) => theme.bgCard};
   border-radius: 4px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);

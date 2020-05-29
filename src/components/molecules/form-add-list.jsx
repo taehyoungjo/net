@@ -69,6 +69,8 @@ const Textarea = styled.textarea`
 `;
 
 const Paper = styled.div`
+  transition: background-color 0.2s ease;
+
   background: ${({ theme }) => theme.bgCard};
   border-radius: 4px;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.1);
@@ -103,14 +105,16 @@ const ImportInput = styled(Textarea)`
   }
 
   &::-webkit-scrollbar-track {
+    transition: background-color 0.2s ease;
+
     background: white;
-    /* background: #f1f1f1; */
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
+    transition: background-color 0.2s ease;
+
     background: #f1f1f1;
-    /* background: darkgray; */
     border-radius: 4px;
   }
 `;

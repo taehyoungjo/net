@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { gray, dark } from "../../themes";
 
 const ColorPicker = styled.div``;
 
@@ -50,8 +51,11 @@ export default class Options extends React.Component {
     return (
       <SettingsContents>
         <ColorPicker>
-          <PaletteDefault />
-          <PaletteDark />
+          <PaletteDefault
+            type="button"
+            onClick={this.props.themeHandler(gray)}
+          />
+          <PaletteDark type="button" onClick={this.props.themeHandler(dark)} />
           <PaletteColorful />
           <PalettePastel />
           <PaletteCool />
