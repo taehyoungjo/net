@@ -21,3 +21,15 @@ export const dark = {
   ftSecondary: "",
   hueInv: "100%",
 };
+
+export const pastelPurple = {
+  bgCard: "#fde2e2",
+  bgHovering: "white",
+  bgList: "#edb1f1",
+  bgDark: "#abc2e8",
+  bgBody: "#aa96da",
+  bgScroll: "#d4ebd0",
+  ftPrimary: "black",
+  ftSecondary: "",
+  hueInv: "0%",
+};

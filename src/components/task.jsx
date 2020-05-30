@@ -12,7 +12,7 @@ const Container = styled.div`
   padding: 8px;
   margin-bottom: 8px;
   background-color: ${(props) =>
-    props.isDragging ? props.theme.bgCard : props.theme.bgHovering};
+    props.isDragging ? props.theme.bgHovering : props.theme.bgCard};
 `;
 
 const Text = styled.p`
@@ -114,9 +114,6 @@ export default class Task extends React.Component {
             onClick={this.props.task.content ? this.linkHandler : null}
             onMouseDown={this.newTabHandler}
           >
-            {/* <a href={this.props.task.content} target="_blank">
-              {this.props.task.content}
-            </a> */}
             {this.props.task.content ? (
               <Icon
                 height="16"

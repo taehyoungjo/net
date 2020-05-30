@@ -118,21 +118,23 @@ function sendTab(tab) {
     let parsed = result.board;
 
     if (Object.keys(parsed).length === 0 || parsed.columnOrder.length == 0) {
-      localStorage.setItem(
-        "board",
-        JSON.stringify({
-          tasks: {
-            "task-1": { id: "task-1", content: url, pageTitle: pageTitle },
-          },
-          columns: {
-            "column-1": {
-              id: "column-1",
-              title: "untitled",
-              taskIds: ["task-1"],
+      chrome.storage.sync.set(
+        {
+          board: {
+            tasks: {
+              "task-1": { id: "task-1", content: url, pageTitle: pageTitle },
             },
+            columns: {
+              "column-1": {
+                id: "column-1",
+                title: "untitled",
+                taskIds: ["task-1"],
+              },
+            },
+            columnOrder: ["column-1"],
           },
-          columnOrder: ["column-1"],
-        })
+        },
+        function () {}
       );
     } else {
       // find next available #

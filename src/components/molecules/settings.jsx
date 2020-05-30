@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { gray, dark } from "../../themes";
+import { gray, dark, pastelPurple } from "../../themes";
 
 const ColorPicker = styled.div``;
 
@@ -26,7 +26,7 @@ const PaletteColorful = styled(Button)`
 `;
 
 const PalettePastel = styled(Button)`
-  background-color: lavender;
+  background-color: #aa96da;
 `;
 
 const PaletteCool = styled(Button)`
@@ -56,8 +56,12 @@ export default class Options extends React.Component {
             onClick={this.props.themeHandler(gray)}
           />
           <PaletteDark type="button" onClick={this.props.themeHandler(dark)} />
+          <PalettePastel
+            type="button"
+            onClick={this.props.themeHandler(pastelPurple)}
+          />
           {/* <PaletteColorful />
-          <PalettePastel />
+          
           <PaletteCool /> */}
         </ColorPicker>
         <OolLabel>Open on Launch</OolLabel>

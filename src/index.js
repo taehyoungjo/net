@@ -548,8 +548,12 @@ class App extends React.Component {
   };
 
   onOpenAll = (column) => () => {
+    let cont;
     for (var i = 0; i < column.taskIds.length; i++) {
-      window.open(this.state.tasks[column.taskIds[i]].content);
+      cont = this.state.tasks[column.taskIds[i]].content;
+      if (Boolean(cont)) {
+        window.open(this.state.tasks[column.taskIds[i]].content);
+      }
     }
   };
 
