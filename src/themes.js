@@ -23,12 +23,24 @@ export const dark = {
 };
 
 export const pastelPurple = {
-  bgCard: "#fde2e2",
+  bgCard: "#f6e5f5",
   bgHovering: "white",
-  bgList: "#edb1f1",
-  bgDark: "#abc2e8",
+  bgList: "#abc2e8",
+  bgDark: "#edb1f1",
   bgBody: "#aa96da",
-  bgScroll: "#d4ebd0",
+  bgScroll: "#f4eeff",
+  ftPrimary: "black",
+  ftSecondary: "",
+  hueInv: "0%",
+};
+
+export const coolPastel = {
+  bgCard: "#fbf4f9",
+  bgHovering: "white",
+  bgList: "#f6e7e6",
+  bgDark: "#e9b2bc",
+  bgBody: "#b9cced",
+  bgScroll: "#d3f4ff",
   ftPrimary: "black",
   ftSecondary: "",
   hueInv: "0%",

@@ -142,41 +142,41 @@ export default class Column extends React.Component {
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
         {(provided) => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
-            <ScrollView>
-              <ListHeader
-                title={this.props.column.title}
-                onUpdateTitle={this.props.onUpdateListTitle}
-                onRemove={this.props.onRemoveList}
-                dragHandleProps={provided.dragHandleProps}
-                onClipboard={this.props.onClipboard(this.props.column)}
-                onOpenAll={this.props.onOpenAll}
-              />
-              <Droppable droppableId={this.props.column.id} type="task">
-                {(provided, snapshot) => (
-                  <TaskList
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    isDraggingOver={snapshot.isDraggingOver}
-                  >
-                    {/* {this.props.tasks.map((task, index) => (
+            {/* <ScrollView> */}
+            <ListHeader
+              title={this.props.column.title}
+              onUpdateTitle={this.props.onUpdateListTitle}
+              onRemove={this.props.onRemoveList}
+              dragHandleProps={provided.dragHandleProps}
+              onClipboard={this.props.onClipboard(this.props.column)}
+              onOpenAll={this.props.onOpenAll}
+            />
+            <Droppable droppableId={this.props.column.id} type="task">
+              {(provided, snapshot) => (
+                <TaskList
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {/* {this.props.tasks.map((task, index) => (
                     <Task key={task.id} task={task} index={index} />
                   ))} */}
-                    <InnerList
-                      tasks={this.props.tasks}
-                      onRemoveCard={this.onRemoveCard}
+                  <InnerList
+                    tasks={this.props.tasks}
+                    onRemoveCard={this.onRemoveCard}
+                  />
+                  {this.state.open && (
+                    <FormAddCard
+                      innerRef={this.getFormRef}
+                      onClose={this.setFormState(false)}
+                      onSubmit={this.onAddCard}
                     />
-                    {this.state.open && (
-                      <FormAddCard
-                        innerRef={this.getFormRef}
-                        onClose={this.setFormState(false)}
-                        onSubmit={this.onAddCard}
-                      />
-                    )}
-                    {provided.placeholder}
-                  </TaskList>
-                )}
-              </Droppable>
-            </ScrollView>
+                  )}
+                  {provided.placeholder}
+                </TaskList>
+              )}
+            </Droppable>
+            {/* </ScrollView> */}
             {!this.state.open && (
               <ListFooter onClick={this.setFormState(true)} />
             )}

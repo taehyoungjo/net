@@ -12,6 +12,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import validate from "./validate";
+
 import Column from "./components/column";
 import Header from "./components/header";
 import AddListWrapper from "./components/molecules/add-list-wrapper";
@@ -82,6 +84,13 @@ class App extends React.Component {
     if (chrome.storage) {
       chrome.storage.sync.get(["board"], (result) => {
         let x = Object.keys(result).length;
+        if (x !== 0) {
+          let r = validate(result.board);
+          if (r.length !== 0) {
+            console.log("VALIDATION FAIL", r);
+            return;
+          }
+        }
         chrome.storage.sync.get(["options"], (result2) => {
           let y = Object.keys(result2).length;
           let newState =
@@ -113,6 +122,11 @@ class App extends React.Component {
       chrome.storage.onChanged.addListener(this.storageChange);
     } else {
       let newState = JSON.parse(localStorage.getItem("board"));
+      let r = validate(newState);
+      if (r.length !== 0) {
+        console.log("VALIDATION FAIL", r);
+        return;
+      }
       let options = JSON.parse(localStorage.getItem("options"));
       let theme = options ? options.theme : null;
       if (newState === null) {
@@ -142,12 +156,22 @@ class App extends React.Component {
       );
       if (key === "board") {
         console.log(storageChange.newValue);
-        this.setState(storageChange.newValue);
+        let r = validate(storageChange.newValue);
+        if (r.length !== 0) {
+          console.log("VALIDATION FAIL", r);
+          return;
+        }
+        this.setState({ ...this.state, ...storageChange.newValue });
       }
     }
   };
 
   componentDidUpdate = () => {
+    let r = validate(this.state);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     if (chrome.storage) {
       chrome.storage.sync.set(
         {
@@ -207,6 +231,11 @@ class App extends React.Component {
         ...this.state,
         columnOrder: newColumnOrder,
       };
+      let r = validate(newState);
+      if (r.length !== 0) {
+        console.log("VALIDATION FAIL", r);
+        return;
+      }
       this.setState(newState);
       return;
     }
@@ -231,7 +260,11 @@ class App extends React.Component {
           [newColumn.id]: newColumn,
         },
       };
-
+      let r = validate(newState);
+      if (r.length !== 0) {
+        console.log("VALIDATION FAIL", r);
+        return;
+      }
       this.setState(newState);
       return;
     }
@@ -260,11 +293,15 @@ class App extends React.Component {
       },
     };
 
+    let r = validate(newState);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     this.setState(newState);
   };
 
   onCreateList = (title, imported) => {
-    console.log(imported);
     if (Boolean(imported)) {
       // Parse imported
       let newlineSplit = imported
@@ -329,21 +366,20 @@ class App extends React.Component {
       console.log(importedArray);
 
       // Create tasks
-      let tId;
-      let t = 1;
-      while (true) {
-        tId = "task-" + t;
-        if (!this.state.tasks[tId]) {
-          break;
-        }
-        t++;
-      }
-
-      // Create tasks
       let newTasks = {};
       let taskIds = [];
       let tName;
+      let tId;
+      let t = 0;
       for (let i = 0; i < importedArray.length; i++) {
+        while (true) {
+          t++;
+          tId = "task-" + t;
+          if (!this.state.tasks[tId]) {
+            break;
+          }
+        }
+
         // Check if extension URL
         tName = "task-" + t;
         newTasks[tName] = {
@@ -354,7 +390,6 @@ class App extends React.Component {
 
         // Add to taskIds array for column
         taskIds.unshift(tName);
-        t++;
       }
       let newColId;
       let i = 1;
@@ -380,6 +415,12 @@ class App extends React.Component {
         },
         columnOrder: [newColId, ...this.state.columnOrder],
       };
+
+      let r = validate(newState);
+      if (r.length !== 0) {
+        console.log("VALIDATION FAIL", r);
+        return;
+      }
       this.setState(newState);
     } else {
       let newColId;
@@ -406,6 +447,11 @@ class App extends React.Component {
       };
 
       console.log(newState);
+      let r = validate(newState);
+      if (r.length !== 0) {
+        console.log("VALIDATION FAIL", r);
+        return;
+      }
       this.setState(newState);
     }
   };
@@ -428,6 +474,11 @@ class App extends React.Component {
       columns: newColumns,
       columnOrder: this.state.columnOrder.filter((e) => e !== listId),
     };
+    let r = validate(newState);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     this.setState(newState);
   };
 
@@ -447,6 +498,11 @@ class App extends React.Component {
         [newColumn.id]: newColumn,
       },
     };
+    let r = validate(newState);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     this.setState(newState);
   };
 
@@ -516,6 +572,11 @@ class App extends React.Component {
       columnOrder: this.state.columnOrder,
     };
 
+    let r = validate(newState);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     this.setState(newState);
   };
 
@@ -544,6 +605,12 @@ class App extends React.Component {
       },
       columnOrder: this.state.columnOrder,
     };
+
+    let r = validate(newState);
+    if (r.length !== 0) {
+      console.log("VALIDATION FAIL", r);
+      return;
+    }
     this.setState(newState);
   };
 
