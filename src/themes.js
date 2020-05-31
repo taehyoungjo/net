@@ -23,9 +23,9 @@ export const dark = {
 };
 
 export const pastelPurple = {
-  bgCard: "#E6E6FA",
+  bgCard: "#CCCCCC",
   bgHovering: "white",
-  bgList: "#D8B2D1",
+  bgList: "#BDB4D3",
   bgDark: "#edb1f1",
   bgBody: "#aa96da",
   bgScroll: "#f4eeff",
