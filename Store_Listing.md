@@ -111,7 +111,7 @@ Remote code is any JS, Wasm, or CSS that is not included in the extension's pack
 
 (Yes, I am using remote code:  No I am not using remote code) (1000 chars)
 
-## Pricing and Dsitribution
+## Pricing and Distribution
 
 #### VISIBILITY
 

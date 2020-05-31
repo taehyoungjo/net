@@ -3,14 +3,7 @@
   "description": "Saving and organizing your links",
   "version": "1.0",
   "manifest_version": 2,
-  "permissions": [
-    "activeTab",
-    "tabs",
-    "management",
-    "history",
-    "storage",
-    "contextMenus"
-  ],
+  "permissions": ["activeTab", "tabs", "storage", "contextMenus"],
 
   "background": {
     "scripts": ["background.js"],

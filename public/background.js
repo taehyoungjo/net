@@ -302,31 +302,6 @@ function sendTab(tab) {
 }
 
 chrome.contextMenus.onClicked.addListener(function (info, tabs) {
-  //   info = {
-  //     editable: false
-  //     menuItemId: "current"
-  //   }
-  //   tabs = {
-  //     active: true
-  //     audible: false
-  //     autoDiscardable: true
-  //     discarded: false
-  //     favIconUrl: ""
-  //     height: 756
-  //     highlighted: true
-  //     id: 35
-  //     incognito: false
-  //     index: 6
-  //     mutedInfo: {muted: false}
-  //     pinned: false
-  //     selected: true
-  //     status: "complete"
-  //     title: "Extensions"
-  //     url: "chrome://extensions/"
-  //     width: 759
-  //     windowId: 1
-  //   }
-
   switch (info.menuItemId) {
     case "net":
       chrome.runtime.openOptionsPage();
