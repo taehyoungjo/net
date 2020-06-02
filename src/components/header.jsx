@@ -146,7 +146,8 @@ export default class Header extends React.Component {
           {/* <span role="img" aria-label="net">
             🥅
           </span> */}
-          <Icon src={process.env.PUBLIC_URL + "/icons8-sport-net-50.png"} />
+          {/* <Icon src={process.env.PUBLIC_URL + "/icons8-sport-net-50.png"} /> */}
+          <Icon src={process.env.PUBLIC_URL + "/icon48.png"} />
         </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}

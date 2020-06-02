@@ -1,6 +1,6 @@
 {
   "name": "net",
-  "description": "Saving and organizing your links",
+  "description": "A better way to save and organize the web",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": ["activeTab", "tabs", "storage", "contextMenus"],
