@@ -23,9 +23,9 @@ export const dark = {
 };
 
 export const pastelPurple = {
-  bgCard: "#E6E6FA",
+  bgCard: "lightgrey",
   bgHovering: "white",
-  bgList: "#D8B2D1",
+  bgList: "#BDB4D3",
   bgDark: "#edb1f1",
   bgBody: "#aa96da",
   bgScroll: "#f4eeff",
@@ -45,3 +45,15 @@ export const coolPastel = {
   ftSecondary: "",
   hueInv: "0%",
 };
+
+export const blueGray = {
+  bgCard: "#3a506b",
+  bgHovering: "white",
+  bgList: "#1c2541",
+  bgDark: "lightgrey",
+  bgBody: "#0b132b",
+  bgScroll: "darkgray",
+  ftPrimary: "white",
+  ftSecondary: "black",
+  hueInv: "100%",
+}
