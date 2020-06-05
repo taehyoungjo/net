@@ -1,10 +1,9 @@
 {
   "name": "net",
-  "description": "A better way to save and organize the web",
+  "description": "Save and organize the web",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": ["activeTab", "tabs", "storage", "contextMenus"],
-
   "background": {
     "scripts": ["background.js"],
     "persistent": false

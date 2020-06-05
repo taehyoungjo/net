@@ -32,9 +32,13 @@ const SettingsContents = styled.h4`
   padding: 8px;
 `;
 
+const IconLogo = styled.img`
+  height: 1em;
+`;
+
 const Icon = styled.img`
   height: 1em;
-  /* filter: invert(${({ theme }) => theme.hueInv}); */
+  filter: invert(${({ theme }) => theme.hueInv});
 `;
 
 export default class Header extends React.Component {
@@ -146,8 +150,7 @@ export default class Header extends React.Component {
           {/* <span role="img" aria-label="net">
             🥅
           </span> */}
-          {/* <Icon src={process.env.PUBLIC_URL + "/icons8-sport-net-50.png"} /> */}
-          <Icon src={process.env.PUBLIC_URL + "/icon48.png"} />
+          <IconLogo src={process.env.PUBLIC_URL + "/icon48.png"} />
         </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}
