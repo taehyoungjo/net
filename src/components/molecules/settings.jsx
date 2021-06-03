@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { gray, dark, pastelPurple, coolPastel, blueGray} from "../../themes";
+import { gray, dark, pastelPurple, coolPastel, blueGray } from "../../themes";
 
 const ColorPicker = styled.div``;
 

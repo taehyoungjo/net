@@ -56,4 +56,4 @@ export const blueGray = {
   ftPrimary: "white",
   ftSecondary: "black",
   hueInv: "100%",
-}
+};
