@@ -54,9 +54,13 @@ const IconButton = styled.img`
 `;
 
 export default class Task extends React.Component {
-  state = {
-    showButtons: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showButtons: false,
+    };
+  }
 
   hoverHandler = () => {
     this.setState({ showButtons: true });

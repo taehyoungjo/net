@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { string, func, bool, array } from "prop-types";
 
-import Task from "./task";
+import { InnerList } from "./innerList";
 import ListHeader from "./molecules/list-header";
 import ListFooter from "./molecules/list-footer";
 import FormAddCard from "./molecules/form-add-card";
@@ -65,40 +65,22 @@ const ScrollView = styled.div`
   flex: 1;
 `;
 
-class InnerList extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.tasks === this.props.tasks) {
-      return false;
-    }
-    return true;
-  }
-
-  render() {
-    return this.props.tasks.map((task, index) => (
-      <Task
-        key={task.id}
-        onRemoveCard={this.props.onRemoveCard}
-        task={task}
-        index={index}
-      />
-    ));
-  }
-}
-
+const propTypes = {
+  listId: string,
+  listType: string,
+  onAddCard: func,
+  onCloseForm: func,
+  isFormShow: bool,
+  getFormRef: func,
+  cards: array,
+};
 export default class Column extends React.Component {
-  static propTypes = {
-    listId: string,
-    listType: string,
-    onAddCard: func,
-    onCloseForm: func,
-    isFormShow: bool,
-    getFormRef: func,
-    cards: array,
-  };
-
-  state = {
-    open: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }
 
   componentWillUnmount() {
     document.removeEventListener("click", this.handleClickOutside);
@@ -153,10 +135,10 @@ export default class Column extends React.Component {
               onOpenAll={this.props.onOpenAll}
             />
             <Droppable droppableId={this.props.column.id} type="task">
-              {(provided, snapshot) => (
+              {(droppableProvided, snapshot) => (
                 <TaskList
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+                  ref={droppableProvided.innerRef}
+                  {...droppableProvided.droppableProps}
                   isDraggingOver={snapshot.isDraggingOver}
                 >
                   {/* {this.props.tasks.map((task, index) => (
@@ -173,7 +155,7 @@ export default class Column extends React.Component {
                       onSubmit={this.onAddCard}
                     />
                   )}
-                  {provided.placeholder}
+                  {droppableProvided.placeholder}
                 </TaskList>
               )}
             </Droppable>

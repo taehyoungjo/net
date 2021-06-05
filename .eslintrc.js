@@ -62,5 +62,6 @@ module.exports = {
     "react/no-array-index-key": "warn",
     "jsx-a11y/no-static-element-interactions": "warn",
     "jsx-a11y/click-events-have-key-events": "warn",
+    "react/sort-comp": "off",
   },
 };

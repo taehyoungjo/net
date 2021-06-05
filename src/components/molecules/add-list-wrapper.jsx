@@ -27,14 +27,18 @@ const PlaceholderWrapper = styled.div`
   }
 `;
 
-class AddListWrapper extends React.Component {
-  static propTypes = {
-    onCreate: func,
-  };
+const propTypes = {
+  onCreate: func,
+};
 
-  state = {
-    isOpen: false,
-  };
+class AddListWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: false,
+    };
+  }
 
   componentWillUnmount() {
     document.removeEventListener("click", this.handleClickOutside);

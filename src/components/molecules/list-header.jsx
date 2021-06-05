@@ -91,6 +91,7 @@ const propTypes = {
   dragHandleProps: object,
 };
 class ListHeader extends React.PureComponent {
+  // eslint-disable-next-line react/sort-comp
   constructor(props) {
     super(props);
 

@@ -43,6 +43,7 @@ const Icon = styled.img`
 
 export default class Header extends React.Component {
   constructor(props) {
+    super(props);
     this.state = {
       showSettings: false,
       openOnLaunch: true,

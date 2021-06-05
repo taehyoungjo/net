@@ -154,8 +154,8 @@ class FormAddInline extends React.PureComponent {
     }
   };
 
-  getInputRef = (node) => {
-    this.input = node;
+  getInputRef = (inputNode) => {
+    this.input = inputNode;
   };
 
   resizeInput = () => {
