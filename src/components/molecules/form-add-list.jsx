@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 import { string, func, node } from "prop-types";
 import { ifProp } from "styled-tools";
@@ -119,25 +119,29 @@ const ImportInput = styled(Textarea)`
   }
 `;
 
-class FormAddInline extends React.PureComponent {
-  static propTypes = {
-    children: node,
-    actionContent: string,
-    onSubmit: func,
-    onClose: func,
-  };
+const propTypes = {
+  children: node,
+  actionContent: string,
+  onSubmit: func,
+  onClose: func,
+};
 
-  state = {
-    title: "",
-    imported: "",
-  };
+class FormAddInline extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: "",
+      imported: "",
+    };
+  }
 
   onChangeTitle = (event) => {
-    this.setState({ ...this.state, title: event.target.value });
+    this.setState((state) => ({ ...state, title: event.target.value }));
   };
 
   onChangedImported = (event) => {
-    this.setState({ ...this.state, imported: event.target.value });
+    this.setState((state) => ({ ...state, imported: event.target.value }));
     this.resizeInput();
   };
 
@@ -177,7 +181,7 @@ class FormAddInline extends React.PureComponent {
             ref={this.getInputRef}
             onChange={this.onChangedImported}
             placeholder="Paste to import.                                                        ––                                                                                      Ex:                                                                                Google: https://www.google.com/             Some useful text! https://www.youtube.com/"
-          ></ImportInput>
+          />
         </PaperInput>
 
         <Action>

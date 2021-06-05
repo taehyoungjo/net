@@ -83,17 +83,17 @@ class App extends React.Component {
   componentDidMount = () => {
     if (chrome.storage) {
       chrome.storage.sync.get(["board"], (result) => {
-        let x = Object.keys(result).length;
+        const x = Object.keys(result).length;
         if (x !== 0) {
-          let r = validate(result.board);
+          const r = validate(result.board);
           if (r.length !== 0) {
             console.log("VALIDATION FAIL", r);
             return;
           }
         }
         chrome.storage.sync.get(["options"], (result2) => {
-          let y = Object.keys(result2).length;
-          let newState =
+          const y = Object.keys(result2).length;
+          const newState =
             x === 0
               ? {
                   theme:
@@ -121,31 +121,31 @@ class App extends React.Component {
       });
       chrome.storage.onChanged.addListener(this.storageChange);
     } else {
-      let newState = JSON.parse(localStorage.getItem("board"));
-      let r = validate(newState);
+      const newState = JSON.parse(localStorage.getItem("board"));
+      const r = validate(newState);
       if (r.length !== 0) {
         console.log("VALIDATION FAIL", r);
         return;
       }
-      let options = JSON.parse(localStorage.getItem("options"));
-      let theme = options ? options.theme : null;
+      const options = JSON.parse(localStorage.getItem("options"));
+      const theme = options ? options.theme : null;
       if (newState === null) {
         this.setState({
-          theme: theme ? theme : gray,
+          theme: theme || gray,
           tasks: {},
           columns: {},
           columnOrder: [],
         });
       } else {
-        newState.theme = theme ? theme : gray;
+        newState.theme = theme || gray;
         this.setState(newState);
       }
     }
   };
 
   storageChange = (changes, namespace) => {
-    for (var key in changes) {
-      var storageChange = changes[key];
+    for (const key in changes) {
+      const storageChange = changes[key];
       console.log(
         'Storage key "%s" in namespace "%s" changed. ' +
           'Old value was "%s", new value is "%s".',
@@ -156,7 +156,7 @@ class App extends React.Component {
       );
       if (key === "board") {
         console.log(storageChange.newValue);
-        let r = validate(storageChange.newValue);
+        const r = validate(storageChange.newValue);
         if (r.length !== 0) {
           console.log("VALIDATION FAIL", r);
           return;
@@ -167,7 +167,7 @@ class App extends React.Component {
   };
 
   componentDidUpdate = () => {
-    let r = validate(this.state);
+    const r = validate(this.state);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -231,7 +231,7 @@ class App extends React.Component {
         ...this.state,
         columnOrder: newColumnOrder,
       };
-      let r = validate(newState);
+      const r = validate(newState);
       if (r.length !== 0) {
         console.log("VALIDATION FAIL", r);
         return;
@@ -260,7 +260,7 @@ class App extends React.Component {
           [newColumn.id]: newColumn,
         },
       };
-      let r = validate(newState);
+      const r = validate(newState);
       if (r.length !== 0) {
         console.log("VALIDATION FAIL", r);
         return;
@@ -293,7 +293,7 @@ class App extends React.Component {
       },
     };
 
-    let r = validate(newState);
+    const r = validate(newState);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -302,18 +302,18 @@ class App extends React.Component {
   };
 
   onCreateList = (title, imported) => {
-    if (Boolean(imported)) {
+    if (imported) {
       // Parse imported
-      let newlineSplit = imported
+      const newlineSplit = imported
         .split("\n")
         .filter((e) => e !== "")
         .reverse();
-      let importedArray = newlineSplit.map((e) => {
-        let colonSplit = e.split(": ");
-        let last = colonSplit[colonSplit.length - 1];
+      const importedArray = newlineSplit.map((e) => {
+        const colonSplit = e.split(": ");
+        const last = colonSplit[colonSplit.length - 1];
 
         function validURL(str) {
-          var pattern = new RegExp(
+          const pattern = new RegExp(
             "^(https?:\\/\\/)?" + // protocol
               "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
               "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
@@ -325,7 +325,7 @@ class App extends React.Component {
           return !!pattern.test(str);
         }
 
-        let returnObj = {};
+        const returnObj = {};
         // Check if last is URL
         if (validURL(last)) {
           // If it is, content = last, concatenate everything before
@@ -366,22 +366,22 @@ class App extends React.Component {
       console.log(importedArray);
 
       // Create tasks
-      let newTasks = {};
-      let taskIds = [];
+      const newTasks = {};
+      const taskIds = [];
       let tName;
       let tId;
       let t = 0;
       for (let i = 0; i < importedArray.length; i++) {
         while (true) {
           t++;
-          tId = "task-" + t;
+          tId = `task-${t}`;
           if (!this.state.tasks[tId]) {
             break;
           }
         }
 
         // Check if extension URL
-        tName = "task-" + t;
+        tName = `task-${t}`;
         newTasks[tName] = {
           id: tName,
           content: importedArray[i].content,
@@ -394,7 +394,7 @@ class App extends React.Component {
       let newColId;
       let i = 1;
       while (true) {
-        newColId = "column-" + i;
+        newColId = `column-${i}`;
         if (!this.state.columns[newColId]) {
           break;
         }
@@ -403,8 +403,8 @@ class App extends React.Component {
       // Create column
       const newColumn = {
         id: newColId,
-        title: Boolean(title) ? title : "untitled",
-        taskIds: taskIds,
+        title: title || "untitled",
+        taskIds,
       };
       const newState = {
         ...this.state,
@@ -416,7 +416,7 @@ class App extends React.Component {
         columnOrder: [newColId, ...this.state.columnOrder],
       };
 
-      let r = validate(newState);
+      const r = validate(newState);
       if (r.length !== 0) {
         console.log("VALIDATION FAIL", r);
         return;
@@ -426,7 +426,7 @@ class App extends React.Component {
       let newColId;
       let i = 1;
       while (true) {
-        newColId = "column-" + i;
+        newColId = `column-${i}`;
         if (!this.state.columns[newColId]) {
           break;
         }
@@ -434,7 +434,7 @@ class App extends React.Component {
       }
       const newColumn = {
         id: newColId,
-        title: Boolean(title) ? title : "untitled",
+        title: title || "untitled",
         taskIds: [],
       };
       const newState = {
@@ -447,7 +447,7 @@ class App extends React.Component {
       };
 
       console.log(newState);
-      let r = validate(newState);
+      const r = validate(newState);
       if (r.length !== 0) {
         console.log("VALIDATION FAIL", r);
         return;
@@ -460,9 +460,9 @@ class App extends React.Component {
     const newColumns = this.state.columns;
     const deletedColsTasks = newColumns[listId].taskIds;
     // Remove tasks of list
-    var newtasks = this.state.tasks;
-    var taskId;
-    for (var i = 0; i < deletedColsTasks.length; i++) {
+    const newtasks = this.state.tasks;
+    let taskId;
+    for (let i = 0; i < deletedColsTasks.length; i++) {
       taskId = deletedColsTasks[i];
       delete newtasks[taskId];
     }
@@ -474,7 +474,7 @@ class App extends React.Component {
       columns: newColumns,
       columnOrder: this.state.columnOrder.filter((e) => e !== listId),
     };
-    let r = validate(newState);
+    const r = validate(newState);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -485,7 +485,7 @@ class App extends React.Component {
   onUpdateList = (list) => (title) => {
     const newColumn = {
       ...list,
-      title: title,
+      title,
     };
 
     const columnsWo = this.state.columns;
@@ -498,7 +498,7 @@ class App extends React.Component {
         [newColumn.id]: newColumn,
       },
     };
-    let r = validate(newState);
+    const r = validate(newState);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -509,7 +509,7 @@ class App extends React.Component {
   onClipboard = (column) => () => {
     let out = "";
     let currTask;
-    for (var i = 0; i < column.taskIds.length; i++) {
+    for (let i = 0; i < column.taskIds.length; i++) {
       out += "\n";
       currTask = this.state.tasks[column.taskIds[i]];
       if (currTask.pageTitle) {
@@ -540,7 +540,7 @@ class App extends React.Component {
     let newTaskId;
     let i = 1;
     while (true) {
-      newTaskId = "task-" + i;
+      newTaskId = `task-${i}`;
       if (!this.state.tasks[newTaskId]) {
         break;
       }
@@ -557,7 +557,7 @@ class App extends React.Component {
     };
 
     // Update column
-    let newColumn = this.state.columns[colId];
+    const newColumn = this.state.columns[colId];
     newColumn.taskIds.push(newTaskId);
 
     const newColumns = {
@@ -572,7 +572,7 @@ class App extends React.Component {
       columnOrder: this.state.columnOrder,
     };
 
-    let r = validate(newState);
+    const r = validate(newState);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -582,7 +582,7 @@ class App extends React.Component {
 
   onRemoveCard = (colId) => (cardId) => {
     // Remove task
-    let newtasks = this.state.tasks;
+    const newtasks = this.state.tasks;
     delete newtasks[cardId];
 
     const oldCol = this.state.columns[colId];
@@ -606,7 +606,7 @@ class App extends React.Component {
       columnOrder: this.state.columnOrder,
     };
 
-    let r = validate(newState);
+    const r = validate(newState);
     if (r.length !== 0) {
       console.log("VALIDATION FAIL", r);
       return;
@@ -616,9 +616,9 @@ class App extends React.Component {
 
   onOpenAll = (column) => () => {
     let cont;
-    for (var i = 0; i < column.taskIds.length; i++) {
+    for (let i = 0; i < column.taskIds.length; i++) {
       cont = this.state.tasks[column.taskIds[i]].content;
-      if (Boolean(cont)) {
+      if (cont) {
         window.open(this.state.tasks[column.taskIds[i]].content);
       }
     }

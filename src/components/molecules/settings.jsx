@@ -79,7 +79,7 @@ export default class Options extends React.Component {
           type="checkbox"
           checked={this.props.openOnLaunch}
           onChange={() => this.props.toggleOpenOnLaunch()}
-        ></Ool>
+        />
       </SettingsContents>
     );
   }

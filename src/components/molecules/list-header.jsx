@@ -176,7 +176,7 @@ class ListHeader extends React.PureComponent {
         {showTarget && <ClickTarget onClick={this.onTargetClick} />}
         <TitleInput
           spellCheck={false}
-          autoCorrect={"false"}
+          autoCorrect="false"
           maxLength={512}
           ref={this.getInputRef}
           value={title}
@@ -189,21 +189,21 @@ class ListHeader extends React.PureComponent {
           showButtons={showButtons}
           onClick={onOpenAll}
         >
-          <Icon src={process.env.PUBLIC_URL + "/icons8-open-in-popup-16.png"} />
+          <Icon src={`${process.env.PUBLIC_URL}/icons8-open-in-popup-16.png`} />
         </ButtonOpenAll>
         <ButtonClip
           type="button"
           showButtons={showButtons}
           onClick={onClipboard}
         >
-          <Icon src={process.env.PUBLIC_URL + "/icons8-copy-50.png"} />
+          <Icon src={`${process.env.PUBLIC_URL}/icons8-copy-50.png`} />
         </ButtonClip>
         <ButtonRemove
           type="button"
           showButtons={showButtons}
           onClick={onRemove}
         >
-          <Icon src={process.env.PUBLIC_URL + "/icons8-multiply-50.png"} />
+          <Icon src={`${process.env.PUBLIC_URL}/icons8-multiply-50.png`} />
         </ButtonRemove>
       </Container>
     );

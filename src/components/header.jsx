@@ -52,7 +52,7 @@ export default class Header extends React.Component {
       chrome.storage.sync.get(["options"], (result) => {
         console.log(result);
 
-        let ooL = result.hasOwnProperty("options")
+        const ooL = result.hasOwnProperty("options")
           ? result.options.hasOwnProperty("openOnLaunch")
             ? result.options.openOnLaunch
             : true
@@ -90,30 +90,30 @@ export default class Header extends React.Component {
   };
 
   toggleOpenOnLaunch = () => {
-    let newState = !this.state.openOnLaunch;
+    const newState = !this.state.openOnLaunch;
     this.setState({
       ...this.state,
       openOnLaunch: newState,
     });
     if (chrome.storage) {
       chrome.storage.sync.get(["options"], (result2) => {
-        let theme = result2.options
+        const theme = result2.options
           ? result2.options.theme
             ? result2.options.theme
             : gray
           : gray;
 
         chrome.storage.sync.set(
-          { options: { openOnLaunch: newState, theme: theme } },
+          { options: { openOnLaunch: newState, theme } },
           function () {}
         );
       });
     } else {
-      let options = JSON.parse(localStorage.getItem("options"));
-      let theme = options ? options.theme : gray;
+      const options = JSON.parse(localStorage.getItem("options"));
+      const theme = options ? options.theme : gray;
       localStorage.setItem(
         "options",
-        JSON.stringify({ openOnLaunch: newState, theme: theme })
+        JSON.stringify({ openOnLaunch: newState, theme })
       );
     }
   };
@@ -150,7 +150,7 @@ export default class Header extends React.Component {
           {/* <span role="img" aria-label="net">
             🥅
           </span> */}
-          <IconLogo src={process.env.PUBLIC_URL + "/icon48.png"} />
+          <IconLogo src={`${process.env.PUBLIC_URL}/icon48.png`} />
         </Logo>
         <SettingsBox
           onMouseEnter={this.hoverHandler}
@@ -164,7 +164,7 @@ export default class Header extends React.Component {
             />
           ) : (
             <SettingsContents>
-              <Icon src={process.env.PUBLIC_URL + "/icons8-settings-50.png"} />
+              <Icon src={`${process.env.PUBLIC_URL}/icons8-settings-50.png`} />
             </SettingsContents>
           )}
         </SettingsBox>

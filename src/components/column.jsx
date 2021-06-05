@@ -72,6 +72,7 @@ class InnerList extends React.Component {
     }
     return true;
   }
+
   render() {
     return this.props.tasks.map((task, index) => (
       <Task

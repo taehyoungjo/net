@@ -97,16 +97,19 @@ const URLInput = styled.input`
   }
 `;
 
+const propTypes = {
+  onSubmit: func,
+  onClose: func,
+};
 class FormAddCard extends React.PureComponent {
-  static propTypes = {
-    onSubmit: func,
-    onClose: func,
-  };
+  constructor(props) {
+    super(props);
 
-  state = {
-    title: "",
-    url: "",
-  };
+    this.state = {
+      title: "",
+      url: "",
+    };
+  }
 
   componentDidMount() {
     this.setState({ title: "", url: "" }, () => {});
@@ -115,13 +118,13 @@ class FormAddCard extends React.PureComponent {
 
   onChangeTitle = (event) => {
     const title = event.target.value;
-    this.setState({ ...this.state, title: title });
+    this.setState((state) => ({ ...state, title }));
     this.resizeInput();
   };
 
   onChangeURL = (event) => {
     const url = event.target.value;
-    this.setState({ ...this.state, url: url });
+    this.setState((state) => ({ state, url }));
   };
 
   onClose = () => {

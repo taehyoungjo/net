@@ -118,10 +118,7 @@ export default class Task extends React.Component {
               <Icon
                 height="16"
                 width="16"
-                src={
-                  "http://www.google.com/s2/favicons?domain=" +
-                  this.props.task.content
-                }
+                src={`http://www.google.com/s2/favicons?domain=${this.props.task.content}`}
               />
             ) : null}
 
@@ -137,7 +134,7 @@ export default class Task extends React.Component {
               onClick={this.removeHandler}
             >
               <IconButton
-                src={process.env.PUBLIC_URL + "/icons8-multiply-50.png"}
+                src={`${process.env.PUBLIC_URL}/icons8-multiply-50.png`}
               />
             </ButtonRemove>
             <ButtonClip
@@ -146,7 +143,7 @@ export default class Task extends React.Component {
               onClick={this.clipHandler}
             >
               <IconButton
-                src={process.env.PUBLIC_URL + "/icons8-copy-50.png"}
+                src={`${process.env.PUBLIC_URL}/icons8-copy-50.png`}
               />
             </ButtonClip>
           </Container>
