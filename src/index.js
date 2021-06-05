@@ -42,43 +42,44 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
-class InnerList extends React.PureComponent {
-  render() {
-    const {
-      column,
-      taskMap,
-      index,
-      onCreateCard,
-      onRemoveCard,
-      onRemoveList,
-      onUpdateListTitle,
-      onClipboard,
-      onOpenAll,
-    } = this.props;
-    const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-    return (
-      <Column
-        column={column}
-        tasks={tasks}
-        index={index}
-        onCreateCard={onCreateCard}
-        onRemoveCard={onRemoveCard}
-        onRemoveList={onRemoveList}
-        onUpdateListTitle={onUpdateListTitle}
-        onClipboard={onClipboard}
-        onOpenAll={onOpenAll}
-      />
-    );
-  }
-}
-
+const InnerList = (props) => {
+  const {
+    column,
+    taskMap,
+    index,
+    onCreateCard,
+    onRemoveCard,
+    onRemoveList,
+    onUpdateListTitle,
+    onClipboard,
+    onOpenAll,
+  } = props;
+  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
+  return (
+    <Column
+      column={column}
+      tasks={tasks}
+      index={index}
+      onCreateCard={onCreateCard}
+      onRemoveCard={onRemoveCard}
+      onRemoveList={onRemoveList}
+      onUpdateListTitle={onUpdateListTitle}
+      onClipboard={onClipboard}
+      onOpenAll={onOpenAll}
+    />
+  );
+};
 class App extends React.Component {
-  state = {
-    theme: {},
-    tasks: {},
-    columns: {},
-    columnOrder: [],
-  };
+  constructor(props) {
+    super(props);
+
+    state = {
+      theme: {},
+      tasks: {},
+      columns: {},
+      columnOrder: [],
+    };
+  }
 
   componentDidMount = () => {
     if (chrome.storage) {
@@ -161,7 +162,7 @@ class App extends React.Component {
           console.log("VALIDATION FAIL", r);
           return;
         }
-        this.setState({ ...this.state, ...storageChange.newValue });
+        this.setState((state) => ({ ...state, ...storageChange.newValue }));
       }
     }
   };
@@ -625,10 +626,10 @@ class App extends React.Component {
   };
 
   themeHandler = (value) => {
-    this.setState({
-      ...this.state,
+    this.setState((state) => ({
+      ...state,
       theme: value,
-    });
+    }));
   };
 
   render() {

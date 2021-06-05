@@ -50,37 +50,28 @@ const Ool = styled.input`
   margin-left: 5px;
 `;
 
-export default class Options extends React.Component {
-  render() {
-    return (
-      <SettingsContents>
-        <ColorPicker>
-          <PaletteDefault
-            type="button"
-            onClick={this.props.themeHandler(gray)}
-          />
-          <PaletteDark type="button" onClick={this.props.themeHandler(dark)} />
-          <PalettePastel
-            type="button"
-            onClick={this.props.themeHandler(pastelPurple)}
-          />
-          <PaletteCool
-            type="button"
-            onClick={this.props.themeHandler(coolPastel)}
-          />
-          <PaletteBlue
-            type="button"
-            onClick={this.props.themeHandler(blueGray)}
-          />
-        </ColorPicker>
-        <OolLabel>Open on Launch</OolLabel>
-        <Ool
-          id="openOnLaunch"
-          type="checkbox"
-          checked={this.props.openOnLaunch}
-          onChange={() => this.props.toggleOpenOnLaunch()}
+const Options = (props) => {
+  return (
+    <SettingsContents>
+      <ColorPicker>
+        <PaletteDefault type="button" onClick={props.themeHandler(gray)} />
+        <PaletteDark type="button" onClick={props.themeHandler(dark)} />
+        <PalettePastel
+          type="button"
+          onClick={props.themeHandler(pastelPurple)}
         />
-      </SettingsContents>
-    );
-  }
-}
+        <PaletteCool type="button" onClick={props.themeHandler(coolPastel)} />
+        <PaletteBlue type="button" onClick={props.themeHandler(blueGray)} />
+      </ColorPicker>
+      <OolLabel>Open on Launch</OolLabel>
+      <Ool
+        id="openOnLaunch"
+        type="checkbox"
+        checked={props.openOnLaunch}
+        onChange={() => props.toggleOpenOnLaunch()}
+      />
+    </SettingsContents>
+  );
+};
+
+export default Options;

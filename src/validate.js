@@ -22,6 +22,8 @@ const validateTasks = (object) => {
       ) {
         return true;
       }
+
+      return false;
     });
 
   return tasksArray;
@@ -60,6 +62,8 @@ const validateColumns = (object, tasks) => {
         }
         taskNames.unshift(colObj.taskIds[i]);
       }
+
+      return false;
     });
 
   return colsArray;

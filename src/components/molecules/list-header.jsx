@@ -84,13 +84,23 @@ const Icon = styled.img`
   filter: invert(${({ theme }) => theme.hueInv});
 `;
 
+const propTypes = {
+  title: string.isRequired,
+  onUpdateTitle: func,
+  onRemove: func,
+  dragHandleProps: object,
+};
 class ListHeader extends React.PureComponent {
-  static propTypes = {
-    title: string.isRequired,
-    onUpdateTitle: func,
-    onRemove: func,
-    dragHandleProps: object,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: this.props.title,
+      prevTitle: this.props.title,
+      showTarget: true,
+      showButtons: false,
+    };
+  }
 
   static getDerivedStateFromProps(props, state) {
     if (props.title === state.prevTitle) {
@@ -102,13 +112,6 @@ class ListHeader extends React.PureComponent {
       prevTitle: props.title,
     };
   }
-
-  state = {
-    title: this.props.title,
-    prevTitle: this.props.title,
-    showTarget: true,
-    showButtons: false,
-  };
 
   input = null;
 

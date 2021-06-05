@@ -42,10 +42,12 @@ const Icon = styled.img`
 `;
 
 export default class Header extends React.Component {
-  state = {
-    showSettings: false,
-    openOnLaunch: true,
-  };
+  constructor(props) {
+    this.state = {
+      showSettings: false,
+      openOnLaunch: true,
+    };
+  }
 
   componentDidMount = () => {
     if (chrome.storage) {
@@ -58,25 +60,25 @@ export default class Header extends React.Component {
             : true
           : true;
         console.log(ooL);
-        this.setState({
-          showSettings: this.state.showSettings,
+        this.setState((state) => ({
+          showSettings: state.showSettings,
           openOnLaunch: ooL,
-        });
+        }));
       });
     } else {
       const options = JSON.parse(localStorage.getItem("options"));
       if (options === null) {
-        this.setState({
-          showSettings: this.state.showSettings,
+        this.setState((state) => ({
+          showSettings: state.showSettings,
           openOnLaunch: true,
-        });
+        }));
       } else {
-        this.setState({
-          showSettings: this.state.showSettings,
+        this.setState((state) => ({
+          showSettings: state.showSettings,
           openOnLaunch: options.hasOwnProperty("openOnLaunch")
             ? options.openOnLaunch
             : true,
-        });
+        }));
       }
     }
   };
@@ -91,10 +93,10 @@ export default class Header extends React.Component {
 
   toggleOpenOnLaunch = () => {
     const newState = !this.state.openOnLaunch;
-    this.setState({
-      ...this.state,
+    this.setState((state) => ({
+      ...state,
       openOnLaunch: newState,
-    });
+    }));
     if (chrome.storage) {
       chrome.storage.sync.get(["options"], (result2) => {
         const theme = result2.options

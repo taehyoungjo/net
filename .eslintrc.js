@@ -41,6 +41,7 @@ module.exports = {
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-use-before-define": "warn",
+    "no-prototype-builtins": "off",
     "import/order": "off",
     "import/prefer-default-export": "off",
     "no-plusplus": "off",
